@@ -1,0 +1,17 @@
+server:
+  port: 8888
+spring:
+  application:
+    name: GSScheduler
+  datasource:
+    url: jdbc:postgresql://localhost:5432/gsscheduler?serverTimeZone=America/São_Paulo
+    username: usuario
+    password: usuario123
+  pa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  vc:
+    hidden method:
+      filter:
+        enabled: true
