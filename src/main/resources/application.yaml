@@ -4,14 +4,35 @@ spring:
   application:
     name: GSScheduler
   datasource:
-    url: jdbc:postgresql://localhost:5432/gsscheduler?serverTimeZone=America/São_Paulo
+    url: jdbc:postgresql://localhost:5432/gsscheduler
     username: usuario
     password: usuario123
-  pa:
+    hikari:
+      auto-commit: true
+  jpa:
     hibernate:
-      ddl-auto: update
-    show-sql: true
-  vc:
-    hidden method:
+      ddl-auto: validate
+    show-sql: false
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    properties:
+      hibernate:
+        format_sql: true
+        jdbc:
+          batch_size: 20
+          fetch_size: 50
+        order_inserts: true
+        order_updates: true
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+  mvc:
+    hiddenmethod:
       filter:
         enabled: true
+
+logging:
+  level:
+    root: INFO
+    org.springframework.security: DEBUG
+    org.flywaydb: DEBUG
