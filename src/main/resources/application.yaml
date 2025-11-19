@@ -4,7 +4,7 @@ spring:
   application:
     name: GSScheduler
   datasource:
-    url: jdbc:postgresql://localhost:5432/gsscheduler
+    url: jdbc:postgresql://localhost:5432/gsscheduler?serverTimeZone=America/São_Paulo
     username: usuario
     password: usuario123
     hikari:
@@ -27,7 +27,7 @@ spring:
     locations: classpath:db/migration
     baseline-on-migrate: true
   mvc:
-    hiddenmethod:
+    hidden-method:
       filter:
         enabled: true
 

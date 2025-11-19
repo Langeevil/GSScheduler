@@ -1,7 +1,7 @@
 -- V1__create_users_and_tasks_tables.sql
 -- Create users table
 CREATE TABLE IF NOT EXISTS users (
-    id serial not null PRIMARY KEY,
+    id BIGSERIAL NOT NULL PRIMARY KEY,
     username VARCHAR(100) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     enabled BOOLEAN NOT NULL DEFAULT TRUE,
@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS users (
 
 -- Create tasks table
 CREATE TABLE IF NOT EXISTS tasks (
-    id serial not null PRIMARY KEY,
+    id BIGSERIAL PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
     description VARCHAR(2000),
     status VARCHAR(100) NOT NULL,
