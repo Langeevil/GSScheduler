@@ -1,43 +1,208 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+    xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Dashboard - GSScheduler</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
         }
-        .container { max-width: 1200px; margin: 0 auto; }
-        .header { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; }
-        .header h1 { color: #333; font-size: 24px; }
-        .header-right { display: flex; gap: 15px; align-items: center; }
-        .user-info { color: #666; font-size: 14px; }
-        .logout-btn { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-size: 14px; transition: transform 0.2s; }
-        .logout-btn:hover { transform: translateY(-2px); }
-        .content-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 30px; }
-        .card { background: white; padding: 25px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); }
-        .card h2 { color: #333; font-size: 18px; margin-bottom: 15px; border-bottom: 2px solid #667eea; padding-bottom: 10px; }
-        .card-icon { font-size: 40px; margin-bottom: 10px; }
-        .card-text { color: #666; font-size: 14px; line-height: 1.6; }
-        .btn-primary { display: inline-block; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 12px 25px; border: none; border-radius: 5px; cursor: pointer; font-size: 14px; text-decoration: none; margin-top: 15px; transition: transform 0.2s; }
-        .btn-primary:hover { transform: translateY(-2px); }
-        .tasks-section { background: white; padding: 25px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); }
-        .tasks-section h2 { color: #333; font-size: 20px; margin-bottom: 20px; border-bottom: 2px solid #667eea; padding-bottom: 10px; }
-        .task-item { background: #f8f9fa; padding: 15px; border-left: 4px solid #667eea; margin-bottom: 15px; border-radius: 5px; }
-        .task-item h3 { color: #333; font-size: 16px; margin-bottom: 5px; }
-        .task-item p { color: #666; font-size: 13px; margin-bottom: 5px; }
-        .task-status { display: inline-block; background: #667eea; color: white; padding: 4px 10px; border-radius: 3px; font-size: 12px; }
-        .empty-state { text-align: center; padding: 40px; color: #999; }
-        .empty-state p { font-size: 16px; margin-bottom: 15px; }
-        .role-badge { display: inline-block; background: #764ba2; color: white; padding: 5px 10px; border-radius: 3px; font-size: 12px; margin-left: 10px; }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 24px;
+        }
+
+        .header-right {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .user-info {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .logout-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: transform 0.2s;
+        }
+
+        .logout-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .card h2 {
+            color: #333;
+            font-size: 18px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .card-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 12px;
+            background: rgba(102, 126, 234, 0.12);
+            color: #667eea;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+        }
+
+        .card-icon svg {
+            width: 28px;
+            height: 28px;
+            stroke: currentColor;
+            stroke-width: 1.6;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .card-text {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .btn-primary {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            text-decoration: none;
+            margin-top: 15px;
+            transition: transform 0.2s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+        }
+
+        .tasks-section {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .tasks-section h2 {
+            color: #333;
+            font-size: 20px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .task-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-left: 4px solid #667eea;
+            margin-bottom: 15px;
+            border-radius: 5px;
+        }
+
+        .task-item h3 {
+            color: #333;
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .task-item p {
+            color: #666;
+            font-size: 13px;
+            margin-bottom: 5px;
+        }
+
+        .task-status {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 3px;
+            font-size: 12px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+
+        .empty-state p {
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+
+        .role-badge {
+            display: inline-block;
+            background: #764ba2;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-size: 12px;
+            margin-left: 10px;
+        }
     </style>
     <script src="/js/app.js"></script>
 </head>
+
 <body>
     <div class="container">
         <div class="header">
@@ -55,21 +220,38 @@
 
         <div class="content-grid">
             <div class="card">
-                <div class="card-icon">🗂</div>
+                <div class="card-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M9 5h12M9 12h12M9 19h12"></path>
+                        <path d="M4 5l1.5 1.5L7 5M4 12l1.5 1.5L7 12M4 19l1.5 1.5L7 19"></path>
+                    </svg>
+                </div>
                 <h2 data-i18n="tasks_title">Minhas Tarefas</h2>
                 <p class="card-text">Visualize, crie e gerencie todas as suas tarefas agendadas em um só lugar.</p>
                 <a href="/tasks" class="btn-primary" data-i18n="go_tasks">Ir para Tarefas</a>
             </div>
 
             <div class="card">
-                <div class="card-icon">⚙️</div>
+                <div class="card-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.065 2.572c.94 1.543-.827 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.572-1.065c-1.543.94-3.31-.827-2.37-2.37a1.724 1.724 0 00-1.065-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.572c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                        <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    </svg>
+                </div>
                 <h2 data-i18n="settings">Configurações</h2>
                 <p class="card-text">Ajuste suas preferências, perfil e configurações da aplicação.</p>
                 <a href="/settings" class="btn-primary">Acessar Configurações</a>
             </div>
 
             <div class="card">
-                <div class="card-icon">📊</div>
+                <div class="card-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M5 20V9"></path>
+                        <path d="M10 20V5"></path>
+                        <path d="M15 20v-8"></path>
+                        <path d="M20 20V4"></path>
+                    </svg>
+                </div>
                 <h2 data-i18n="reports">Relatórios</h2>
                 <p class="card-text">Visualize estatísticas e relatórios sobre suas tarefas.</p>
                 <a href="/reports" class="btn-primary">Ver Relatórios</a>
@@ -85,32 +267,33 @@
             </div>
         </div>
     </div>
-<script>
-    async function loadRecent() {
-        const res = await fetch('/api/tasks?size=5');
-        if (!res.ok) return;
-        const page = await res.json();
-        const tasks = page.content || [];
-        const container = document.getElementById('recent-tasks');
-        const empty = document.getElementById('recent-empty');
-        container.innerHTML = '';
-        if (!tasks.length) {
-            empty.style.display = 'block';
-            return;
-        }
-        empty.style.display = 'none';
-        tasks.forEach(t => {
-            const div = document.createElement('div');
-            div.className = 'task-item';
-            div.innerHTML = `
+    <script>
+        async function loadRecent() {
+            const res = await fetch('/api/tasks?size=5');
+            if (!res.ok) return;
+            const page = await res.json();
+            const tasks = page.content || [];
+            const container = document.getElementById('recent-tasks');
+            const empty = document.getElementById('recent-empty');
+            container.innerHTML = '';
+            if (!tasks.length) {
+                empty.style.display = 'block';
+                return;
+            }
+            empty.style.display = 'none';
+            tasks.forEach(t => {
+                const div = document.createElement('div');
+                div.className = 'task-item';
+                div.innerHTML = `
                 <h3>${t.title || ''}</h3>
                 <p>${t.description || ''}</p>
                 <span class="task-status">${t.status || ''}</span>
             `;
-            container.appendChild(div);
-        });
-    }
-    AppSettings.initPage(() => { loadRecent(); });
-</script>
+                container.appendChild(div);
+            });
+        }
+        AppSettings.initPage(() => { loadRecent(); });
+    </script>
 </body>
+
 </html>
