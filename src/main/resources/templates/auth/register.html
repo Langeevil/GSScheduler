@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Cadastro - GSScheduler</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .card {
+            background: white;
+            padding: 32px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 460px;
+        }
+        h1 { text-align: center; margin-bottom: 8px; color: #333; }
+        p.subtitle { text-align: center; color: #777; margin-bottom: 20px; }
+        .form-group { margin-bottom: 16px; }
+        label { display: block; margin-bottom: 6px; color: #333; font-weight: 600; font-size: 13px; }
+        input {
+            width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px;
+            font-size: 14px;
+        }
+        button {
+            width: 100%; padding: 12px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff; border: none; border-radius: 6px; font-size: 16px; font-weight: 600; cursor: pointer;
+        }
+        .muted { text-align: center; margin-top: 12px; font-size: 13px; }
+        .muted a { color: #667eea; text-decoration: none; }
+        .alert { padding: 12px; border-radius: 6px; margin-bottom: 12px; font-size: 13px; }
+        .alert.error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .alert.success { background: #d1e7dd; color: #0f5132; border: 1px solid #badbcc; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>Crie sua conta</h1>
+        <p class="subtitle">Acesse o GSScheduler com suas credenciais</p>
+
+        <div th:if="${error}" class="alert error" th:text="${error}"></div>
+        <div th:if="${success}" class="alert success" th:text="${success}"></div>
+
+        <form th:action="@{/register}" method="post">
+            <div class="form-group">
+                <label for="username">Usuario</label>
+                <input id="username" name="username" required />
+            </div>
+            <div class="form-group">
+                <label for="password">Senha</label>
+                <input id="password" name="password" type="password" required />
+            </div>
+            <div class="form-group">
+                <label for="confirm">Confirmar senha</label>
+                <input id="confirm" name="confirm" type="password" required />
+            </div>
+            <button type="submit">Cadastrar</button>
+        </form>
+
+        <p class="muted">Ja tem conta? <a href="/login">Voltar ao login</a></p>
+    </div>
+</body>
+</html>

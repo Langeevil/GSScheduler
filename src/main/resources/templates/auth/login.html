@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Login - GSScheduler</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .login-container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 420px;
+        }
+        .login-header { text-align: center; margin-bottom: 30px; }
+        .login-header h1 { color: #333; font-size: 28px; margin-bottom: 5px; }
+        .login-header p { color: #999; font-size: 14px; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; color: #333; font-weight: 500; font-size: 14px; }
+        input[type="text"], input[type="password"] {
+            width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px; transition: border-color 0.3s;
+        }
+        input[type="text"]:focus, input[type="password"]:focus {
+            outline: none; border-color: #667eea; box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        button {
+            width: 100%; padding: 12px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white; border: none; border-radius: 5px; font-size: 16px; font-weight: 600; cursor: pointer; transition: transform 0.2s;
+        }
+        button:hover { transform: translateY(-2px); }
+        .error-message {
+            background-color: #f8d7da; color: #721c24; padding: 12px; border-radius: 5px; margin-bottom: 20px;
+            font-size: 14px; border: 1px solid #f5c6cb;
+        }
+        .info-box {
+            background-color: #e7f3ff; color: #004085; padding: 15px; border-radius: 5px; margin-top: 20px;
+            font-size: 13px; border: 1px solid #b8daff;
+        }
+        .info-box strong { display: block; margin-bottom: 8px; }
+        .info-box p { margin-bottom: 5px; }
+        .muted { text-align: center; margin-top: 12px; font-size: 13px; }
+        .muted a { color: #667eea; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-header">
+            <h1>GSScheduler</h1>
+            <p>Sistema de Agendamento de Tarefas</p>
+        </div>
+
+        <div th:if="${param.error}" class="error-message">
+            Usuario ou senha invalidos. Tente novamente.
+        </div>
+        <div th:if="${param.logout}" class="info-box" style="border-color:#d1e7dd;color:#0f5132;background:#d1e7dd4d;">
+            Sessao encerrada com sucesso.
+        </div>
+        <div th:if="${param.registered}" class="info-box" style="border-color:#d1e7dd;color:#0f5132;background:#d1e7dd4d;">
+            Conta criada. Faça login para continuar.
+        </div>
+
+        <form th:action="@{/login}" method="post">
+            <div class="form-group">
+                <label for="username">Usuario:</label>
+                <input type="text" id="username" name="username" required autofocus />
+            </div>
+
+            <div class="form-group">
+                <label for="password">Senha:</label>
+                <input type="password" id="password" name="password" required />
+            </div>
+
+            <button type="submit">Entrar</button>
+        </form>
+
+        <p class="muted">Nao tem conta? <a href="/register">Cadastre-se</a></p>
+
+        <div class="info-box">
+            <strong>Credenciais de Teste:</strong>
+            <p><strong>Admin:</strong> admin / admin123</p>
+            <p><strong>Usuario:</strong> user / user123</p>
+        </div>
+    </div>
+</body>
+</html>
