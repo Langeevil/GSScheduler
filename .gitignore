@@ -2,6 +2,8 @@ HELP.md
 AUTENTICACAO.md
 AUTH_FIX_NOTES.md
 CREDENCIAIS_TESTE.MD
+CHANGES_LOG.md
+DOCS_OVERVIEW.md
 target/
 .mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
