@@ -1,11 +1,20 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
 <head>
+    <script>
+        (function () { var t = localStorage.getItem('gs_theme') || 'light'; if (t === 'dark') document.documentElement.classList.add('theme-dark'); })();
+    </script>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Login - GSScheduler</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -14,6 +23,7 @@
             justify-content: center;
             align-items: center;
         }
+
         .login-container {
             background: white;
             padding: 40px;
@@ -22,36 +32,112 @@
             width: 100%;
             max-width: 420px;
         }
-        .login-header { text-align: center; margin-bottom: 30px; }
-        .login-header h1 { color: #333; font-size: 28px; margin-bottom: 5px; }
-        .login-header p { color: #999; font-size: 14px; }
-        .form-group { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 8px; color: #333; font-weight: 500; font-size: 14px; }
-        input[type="text"], input[type="password"] {
-            width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px; transition: border-color 0.3s;
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
         }
-        input[type="text"]:focus, input[type="password"]:focus {
-            outline: none; border-color: #667eea; box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+
+        .login-header h1 {
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 5px;
         }
+
+        .login-header p {
+            color: #999;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
         button {
-            width: 100%; padding: 12px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white; border: none; border-radius: 5px; font-size: 16px; font-weight: 600; cursor: pointer; transition: transform 0.2s;
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
         }
-        button:hover { transform: translateY(-2px); }
+
+        button:hover {
+            transform: translateY(-2px);
+        }
+
         .error-message {
-            background-color: #f8d7da; color: #721c24; padding: 12px; border-radius: 5px; margin-bottom: 20px;
-            font-size: 14px; border: 1px solid #f5c6cb;
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 12px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            border: 1px solid #f5c6cb;
         }
+
         .info-box {
-            background-color: #e7f3ff; color: #004085; padding: 15px; border-radius: 5px; margin-top: 20px;
-            font-size: 13px; border: 1px solid #b8daff;
+            background-color: #e7f3ff;
+            color: #004085;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            font-size: 13px;
+            border: 1px solid #b8daff;
         }
-        .info-box strong { display: block; margin-bottom: 8px; }
-        .info-box p { margin-bottom: 5px; }
-        .muted { text-align: center; margin-top: 12px; font-size: 13px; }
-        .muted a { color: #667eea; text-decoration: none; }
+
+        .info-box strong {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .info-box p {
+            margin-bottom: 5px;
+        }
+
+        .muted {
+            text-align: center;
+            margin-top: 12px;
+            font-size: 13px;
+        }
+
+        .muted a {
+            color: #667eea;
+            text-decoration: none;
+        }
+
     </style>
 </head>
+
 <body>
     <div class="login-container">
         <div class="login-header">
@@ -65,7 +151,8 @@
         <div th:if="${param.logout}" class="info-box" style="border-color:#d1e7dd;color:#0f5132;background:#d1e7dd4d;">
             Sessao encerrada com sucesso.
         </div>
-        <div th:if="${param.registered}" class="info-box" style="border-color:#d1e7dd;color:#0f5132;background:#d1e7dd4d;">
+        <div th:if="${param.registered}" class="info-box"
+            style="border-color:#d1e7dd;color:#0f5132;background:#d1e7dd4d;">
             Conta criada. Faça login para continuar.
         </div>
 
@@ -92,4 +179,5 @@
         </div>
     </div>
 </body>
+
 </html>

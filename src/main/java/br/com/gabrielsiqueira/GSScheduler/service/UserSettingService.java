@@ -25,4 +25,8 @@ public class UserSettingService {
     public UserSetting save(UserSetting s) {
         return repo.save(s);
     }
+
+    public void deleteByUser(User user) {
+        repo.deleteByUserId(user.getId());
+    }
 }

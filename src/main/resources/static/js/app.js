@@ -4,6 +4,18 @@ const AppSettings = (() => {
   async function fetchSettings() {
     if (cache) return cache;
     try {
+      const savedTheme = localStorage.getItem("gs_theme");
+      cache = {
+        theme: savedTheme || "light",
+        language: "pt-br",
+        intervalHours: 4,
+        retentionDays: 30,
+        twoFactorEnabled: false,
+      };
+    } catch (e) {
+      cache = null;
+    }
+    try {
       const res = await fetch("/api/settings");
       if (!res.ok) throw new Error("settings fetch error");
       cache = await res.json();
@@ -11,15 +23,18 @@ const AppSettings = (() => {
       cache = {
         theme: "light",
         language: "pt-br",
-        emailNotifications: true,
         intervalHours: 4,
-        retainHistory: true,
+        retentionDays: 30,
+        twoFactorEnabled: false,
       };
     }
     return cache;
   }
 
   function applyTheme(theme) {
+    if (theme) {
+      try { localStorage.setItem("gs_theme", theme); } catch (e) {}
+    }
     const darkId = "app-dark-style";
     if (theme === "dark") {
       if (!document.getElementById(darkId)) {

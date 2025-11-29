@@ -28,6 +28,10 @@ public class TaskService {
         return repo.findByUserId(user.getId(), pageable);
     }
 
+    public java.util.List<Task> listAllByUser(User user) {
+        return repo.findByUserId(user.getId());
+    }
+
     public Page<Task> listByStatus(String status, Pageable pageable) {
         return repo.findByStatus(status, pageable);
     }
@@ -47,5 +51,9 @@ public class TaskService {
 
     public void delete(Long id) {
         repo.deleteById(id);
+    }
+
+    public void deleteByUser(User user) {
+        repo.deleteByUserId(user.getId());
     }
 }

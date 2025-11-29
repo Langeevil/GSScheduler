@@ -1,59 +1,113 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <script>
+        (function() {
+            var theme = localStorage.getItem('gs_theme') || 'light';
+            if (theme === 'dark') {
+                document.documentElement.classList.add('theme-dark');
+            }
+        })();
+    </script>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Tarefas - GSScheduler</title>
     <style>
+        :root {
+            --bg: #f5f7fb;
+            --panel: #ffffff;
+            --text: #1f2333;
+            --muted: #687086;
+            --border: #e4e7f2;
+            --primary: #667eea;
+            --primary-2: #764ba2;
+            --shadow: rgba(0,0,0,0.08);
+            --danger: #e74c3c;
+        }
+        .theme-dark {
+            --bg: #0b0d16;
+            --panel: #1d2333;
+            --text: #e8ecf6;
+            --muted: #b5bed5;
+            --border: #2a3144;
+            --primary: #6b7bff;
+            --primary-2: #4f5ae0;
+            --shadow: rgba(0,0,0,0.55);
+            --danger: #e74c3c;
+        }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--bg);
+            color: var(--text);
             min-height: 100vh;
             padding: 20px;
+            transition: background-color 0.25s ease, color 0.25s ease;
         }
-        .container { max-width: 1200px; margin: 0 auto; }
+        .container { max-width: 1300px; margin: 0 auto; }
         .header {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            background: var(--panel); padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px var(--shadow);
+            margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; transition: background-color 0.25s ease;
         }
-        .header h1 { color: #333; font-size: 24px; }
+        .header h1 { color: var(--text); font-size: 24px; }
         .header-actions { display: flex; gap: 10px; }
-        .btn {
-            border: none; border-radius: 6px; padding: 12px 16px; cursor: pointer;
-            font-size: 14px; transition: transform 0.2s;
-        }
-        .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #fff; }
+        .btn { border: none; border-radius: 6px; padding: 12px 16px; cursor: pointer; font-size: 14px; transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s; }
+        .btn-primary { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-2) 100%); color: #fff; box-shadow: 0 8px 20px rgba(102,126,234,0.25); }
         .btn-secondary { background: #666; color: #fff; }
+        .btn-ghost { background: transparent; color: var(--text); border: 1px solid var(--border); }
         .btn:hover { transform: translateY(-2px); }
-        .content { background: white; padding: 25px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); }
-        .breadcrumb { color: #666; font-size: 14px; margin-bottom: 20px; }
-        .breadcrumb a { color: #667eea; text-decoration: none; }
+        .content { background: var(--panel); padding: 25px; border-radius: 10px; box-shadow: 0 2px 10px var(--shadow); transition: background-color 0.25s ease; }
+        .breadcrumb { color: var(--muted); font-size: 14px; margin-bottom: 20px; }
+        .breadcrumb a { color: var(--primary); text-decoration: none; }
         .breadcrumb a:hover { text-decoration: underline; }
-        h2 { color: #333; font-size: 20px; margin-bottom: 16px; }
+        h2 { color: var(--text); font-size: 20px; margin-bottom: 16px; }
         table { width: 100%; border-collapse: collapse; }
-        th { background: #f4f4f4; padding: 12px; text-align: left; border-bottom: 2px solid #e2e2e2; }
-        td { padding: 12px; border-bottom: 1px solid #eee; vertical-align: top; }
-        tr:hover { background: #fafafa; }
+        th { background: rgba(0,0,0,0.02); padding: 12px; text-align: left; border-bottom: 2px solid var(--border); color: var(--text); }
+        td { padding: 12px; border-bottom: 1px solid var(--border); vertical-align: top; color: var(--text); }
+        tr:hover { background: rgba(0,0,0,0.03); }
         .status-badge { display: inline-block; padding: 6px 10px; border-radius: 4px; font-size: 12px; font-weight: 600; }
         .status-PENDING { background: #fff3cd; color: #856404; }
         .status-IN_PROGRESS { background: #cfe2ff; color: #084298; }
         .status-COMPLETED { background: #d1e7dd; color: #0f5132; }
-        .empty-state { text-align: center; padding: 40px 10px; color: #777; }
+        .empty-state { text-align: center; padding: 40px 10px; color: var(--muted); }
         .modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 10; }
-        .modal { background: #fff; padding: 20px; border-radius: 10px; width: 100%; max-width: 520px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
-        .modal h3 { margin-bottom: 16px; color: #333; }
+        .modal { background: var(--panel); padding: 20px; border-radius: 10px; width: 100%; max-width: 520px; box-shadow: 0 10px 30px var(--shadow); transition: background-color 0.25s ease; }
+        .modal h3 { margin-bottom: 16px; color: var(--text); }
         .form-group { margin-bottom: 14px; }
-        .form-group label { display: block; margin-bottom: 6px; color: #444; font-weight: 600; font-size: 13px; }
-        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; }
+        .form-group label { display: block; margin-bottom: 6px; color: var(--text); font-weight: 600; font-size: 13px; }
+        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 14px; background: transparent; color: var(--text); transition: border-color 0.2s; }
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 2px rgba(102,126,234,0.25); }
         .actions { display: flex; gap: 8px; }
         .toast { position: fixed; bottom: 20px; right: 20px; background: #333; color: #fff; padding: 12px 16px; border-radius: 6px; display: none; }
+
+        /* Kanban */
+        .view-switch { display: flex; gap: 8px; margin-bottom: 16px; }
+        .kanban { display: none; gap: 16px; }
+        .kanban.active { display: grid; grid-template-columns: repeat(auto-fit,minmax(300px,1fr)); }
+        .column { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 14px; min-height: 200px; box-shadow: 0 2px 8px var(--shadow); }
+        .column h3 { margin-bottom: 12px; color: var(--text); display: flex; justify-content: space-between; align-items: center; }
+        .card { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 10px; margin-bottom: 10px; cursor: grab; box-shadow: 0 4px 10px var(--shadow); transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.2s; }
+        .card:hover { box-shadow: 0 8px 18px var(--shadow); transform: translateY(-1px); }
+        .card.dragging { opacity: 0.7; transform: rotate(1deg) scale(1.02); }
+        .card.pop { animation: pop-in 0.2s ease; }
+        .card-title { font-weight: 700; color: var(--text); margin-bottom: 6px; }
+        .card-desc { color: var(--muted); font-size: 13px; margin-bottom: 8px; }
+        .card-meta { font-size: 12px; color: var(--muted); display: flex; justify-content: space-between; align-items: center; gap: 6px; }
+        .dropzone { min-height: 40px; padding: 4px; border: 1px dashed transparent; border-radius: 6px; transition: border-color 0.2s, background-color 0.2s; }
+        .dropzone.over { border-color: var(--primary); background: rgba(102,126,234,0.08); }
+        .kanban-form { background: var(--panel); border: 1px dashed var(--border); border-radius: 8px; padding: 10px; margin-bottom: 10px; }
+        .kanban-form input, .kanban-form textarea { width: 100%; margin-bottom: 6px; padding: 8px; border: 1px solid var(--border); border-radius: 6px; background: transparent; color: var(--text); }
+        .app-footer { background: var(--panel); color: var(--text); margin-top: 30px; padding: 18px 14px; text-align: center; border-radius: 10px; border: 1px solid var(--border); box-shadow: 0 6px 16px var(--shadow); }
+        .app-footer .hr-container { display: flex; justify-content: center; margin: 8px 0; }
+        .app-footer hr { width: 90%; border: 0; border-top: 2px solid var(--primary); opacity: 0.6; }
+        input[type="datetime-local"]::-webkit-calendar-picker-indicator { filter: invert(0); }
+        .theme-dark input[type="datetime-local"]::-webkit-calendar-picker-indicator { filter: invert(1); }
+
+        @keyframes pop-in {
+            from { transform: scale(0.95); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        .row-fade { animation: pop-in 0.18s ease; }
     </style>
     <script src="/js/app.js"></script>
 </head>
@@ -72,21 +126,48 @@
             <a href="/dashboard" data-i18n="dashboard">Dashboard</a> / <span data-i18n="tasks">Tarefas</span>
         </div>
 
-        <h2 data-i18n="list_title">Lista de Tarefas</h2>
-        <div id="task-table-wrapper">
-            <div class="empty-state" id="empty-state" data-i18n="empty_tasks">Nenhuma tarefa cadastrada. Clique em "+ Nova Tarefa" para criar.</div>
-            <table id="task-table" style="display:none">
-                <thead>
-                <tr>
-                    <th>Título</th>
-                    <th>Status</th>
-                    <th>Agendada para</th>
-                    <th>Descrição</th>
-                    <th>Ações</th>
-                </tr>
-                </thead>
-                <tbody id="task-body"></tbody>
-            </table>
+        <div class="view-switch">
+            <button class="btn btn-primary" id="btn-view-list">Modo Lista</button>
+            <button class="btn btn-ghost" id="btn-view-kanban">Modo Kanban</button>
+        </div>
+
+        <div id="list-view">
+            <h2 data-i18n="list_title">Lista de Tarefas</h2>
+            <div id="task-table-wrapper">
+                <div class="empty-state" id="empty-state" data-i18n="empty_tasks">Nenhuma tarefa cadastrada. Clique em "+ Nova Tarefa" para criar.</div>
+                <table id="task-table" style="display:none">
+                    <thead>
+                    <tr>
+                        <th>Título</th>
+                        <th>Status</th>
+                        <th>Agendada para</th>
+                        <th>Descrição</th>
+                        <th>Ações</th>
+                    </tr>
+                    </thead>
+                    <tbody id="task-body"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="kanban-view" class="kanban">
+            <div class="column" data-status="PENDING">
+                <h3>Pendentes</h3>
+                <div class="kanban-form">
+                    <input type="text" id="kanban-title" placeholder="Título da tarefa" />
+                    <textarea id="kanban-desc" rows="2" placeholder="Descrição (opcional)"></textarea>
+                    <button class="btn btn-primary" id="btn-kanban-add">Adicionar</button>
+                </div>
+                <div class="dropzone" data-status="PENDING"></div>
+            </div>
+            <div class="column" data-status="IN_PROGRESS">
+                <h3>Em progresso</h3>
+                <div class="dropzone" data-status="IN_PROGRESS"></div>
+            </div>
+            <div class="column" data-status="COMPLETED">
+                <h3>Concluídas</h3>
+                <div class="dropzone" data-status="COMPLETED"></div>
+            </div>
         </div>
     </div>
 </div>
@@ -125,6 +206,14 @@
 </div>
 
 <div class="toast" id="toast"></div>
+<div class="app-footer">
+    <footer>
+        <p>Gabriel da Silva Siqueira</p>
+        <div class="hr-container"><hr></div>
+        <p>Copyright &copy; <script>document.write(new Date().getFullYear())</script>. Todos os direitos reservados.</p>
+        </br>
+    </footer>
+</div>
 
 <script>
     const modal = document.getElementById('modal');
@@ -133,9 +222,30 @@
     const tbody = document.getElementById('task-body');
     const emptyState = document.getElementById('empty-state');
     const toast = document.getElementById('toast');
+    const listView = document.getElementById('list-view');
+    const kanbanView = document.getElementById('kanban-view');
+    const dropzones = Array.from(document.querySelectorAll('.dropzone'));
+    let taskCache = [];
 
     document.getElementById('btn-new-task').addEventListener('click', () => openModal());
     document.getElementById('btn-cancel').addEventListener('click', closeModal);
+    document.getElementById('btn-view-list').addEventListener('click', () => switchView('list'));
+    document.getElementById('btn-view-kanban').addEventListener('click', () => switchView('kanban'));
+    document.getElementById('btn-kanban-add').addEventListener('click', createKanbanTask);
+
+    function switchView(view) {
+        if (view === 'kanban') {
+            kanbanView.classList.add('active');
+            listView.style.display = 'none';
+            document.getElementById('btn-view-kanban').className = 'btn btn-primary';
+            document.getElementById('btn-view-list').className = 'btn btn-ghost';
+        } else {
+            kanbanView.classList.remove('active');
+            listView.style.display = 'block';
+            document.getElementById('btn-view-kanban').className = 'btn btn-ghost';
+            document.getElementById('btn-view-list').className = 'btn btn-primary';
+        }
+    }
 
     function openModal(task) {
         modal.style.display = 'flex';
@@ -146,7 +256,6 @@
         document.getElementById('status').value = task?.status || 'PENDING';
         document.getElementById('scheduledAt').value = task?.scheduledAt ? task.scheduledAt.slice(0,16) : '';
     }
-
     function closeModal() { modal.style.display = 'none'; }
 
     function showToast(message, ok = true) {
@@ -157,10 +266,12 @@
     }
 
     async function fetchTasks() {
-        const res = await fetch('/api/tasks?size=50');
+        const res = await fetch('/api/tasks?size=200');
         if (!res.ok) { showToast('Erro ao carregar tarefas', false); return; }
         const page = await res.json();
-        renderTasks(page.content || []);
+        taskCache = page.content || [];
+        renderTasks(taskCache);
+        renderKanban(taskCache);
     }
 
     function renderTasks(tasks) {
@@ -174,6 +285,7 @@
         emptyState.style.display = 'none';
         tasks.forEach(task => {
             const tr = document.createElement('tr');
+            tr.classList.add('row-fade');
             tr.innerHTML = `
                 <td>${task.title || ''}</td>
                 <td><span class="status-badge status-${task.status}">${task.status || ''}</span></td>
@@ -192,9 +304,76 @@
         });
     }
 
+    function renderKanban(tasks) {
+        dropzones.forEach(zone => {
+            zone.innerHTML = '';
+            zone.classList.remove('over');
+            const status = zone.getAttribute('data-status');
+            const items = tasks.filter(t => t.status === status);
+            if (!items.length) {
+                const empty = document.createElement('div');
+                empty.className = 'empty-state';
+                empty.textContent = 'Sem tarefas';
+                zone.appendChild(empty);
+            } else {
+                items.forEach(task => {
+                    const card = document.createElement('div');
+                    card.className = 'card';
+                    card.classList.add('pop');
+                    card.draggable = true;
+                    card.dataset.id = task.id;
+                    card.dataset.status = task.status;
+                    card.innerHTML = `
+                        <div class="card-title">${task.title || ''}</div>
+                        <div class="card-desc">${task.description || ''}</div>
+                        <div class="card-meta">
+                            <span>${task.scheduledAt ? formatDate(task.scheduledAt) : 'Sem agendamento'}</span>
+                            <span>
+                                <button class="btn btn-ghost" data-action="edit">Editar</button>
+                                <button class="btn btn-ghost" data-action="delete">Excluir</button>
+                            </span>
+                        </div>
+                    `;
+                    card.addEventListener('dragstart', handleDragStart);
+                    card.addEventListener('dragend', handleDragEnd);
+                    card.querySelector('[data-action="edit"]').addEventListener('click', () => openModal(task));
+                    card.querySelector('[data-action="delete"]').addEventListener('click', () => deleteTask(task.id));
+                    zone.appendChild(card);
+                });
+            }
+        });
+    }
+
+    function handleDragStart(e) {
+        e.dataTransfer.setData('text/plain', e.target.dataset.id);
+        e.target.classList.add('dragging');
+        dropzones.forEach(z => z.classList.add('over'));
+    }
+    function handleDragEnd() {
+        dropzones.forEach(z => z.classList.remove('over'));
+        document.querySelectorAll('.card.dragging').forEach(c => c.classList.remove('dragging'));
+    }
+    dropzones.forEach(zone => {
+        zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('over'); });
+        zone.addEventListener('dragleave', () => zone.classList.remove('over'));
+        zone.addEventListener('drop', e => {
+            e.preventDefault();
+            zone.classList.remove('over');
+            const id = e.dataTransfer.getData('text/plain');
+            const newStatus = zone.getAttribute('data-status');
+            updateStatus(id, newStatus, true);
+        });
+    });
+
     function formatDate(val) {
         const d = new Date(val);
-        return d.toLocaleString();
+        return d.toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+    }
+
+    function toIsoLocal(inputValue) {
+        const d = new Date(inputValue);
+        d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+        return d.toISOString().slice(0, 19);
     }
 
     form.addEventListener('submit', async (e) => {
@@ -204,7 +383,7 @@
             title: document.getElementById('title').value.trim(),
             description: document.getElementById('description').value.trim(),
             status: document.getElementById('status').value,
-            scheduledAt: document.getElementById('scheduledAt').value ? new Date(document.getElementById('scheduledAt').value).toISOString() : null
+            scheduledAt: document.getElementById('scheduledAt').value ? toIsoLocal(document.getElementById('scheduledAt').value) : null
         };
         if (!payload.title) { showToast('Informe um título', false); return; }
         const method = id ? 'PUT' : 'POST';
@@ -223,14 +402,36 @@
         }
     });
 
-    async function updateStatus(id, status) {
+    async function createKanbanTask() {
+        const title = document.getElementById('kanban-title').value.trim();
+        const desc = document.getElementById('kanban-desc').value.trim();
+        if (!title) { showToast('Informe um título', false); return; }
+        const res = await fetch('/api/tasks', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ title, description: desc, status: 'PENDING' })
+        });
+        if (res.ok) {
+            document.getElementById('kanban-title').value = '';
+            document.getElementById('kanban-desc').value = '';
+            fetchTasks();
+        } else {
+            showToast('Erro ao criar tarefa', false);
+        }
+    }
+
+    async function updateStatus(id, status, silent) {
         const res = await fetch(`/api/tasks/${id}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ status })
         });
-        if (res.ok) { showToast('Status atualizado'); fetchTasks(); }
-        else { showToast('Erro ao atualizar', false); }
+        if (res.ok) {
+            if (!silent) showToast('Status atualizado');
+            fetchTasks();
+        } else {
+            showToast('Erro ao atualizar', false);
+        }
     }
 
     async function deleteTask(id) {

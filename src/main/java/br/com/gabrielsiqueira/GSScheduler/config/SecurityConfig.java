@@ -7,9 +7,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.session.HttpSessionEventPublisher;
 
 @Configuration
 @EnableWebSecurity
@@ -24,6 +27,16 @@ public class SecurityConfig {
     }
 
     @Bean
+    public SessionRegistry sessionRegistry() {
+        return new SessionRegistryImpl();
+    }
+
+    @Bean
+    public HttpSessionEventPublisher httpSessionEventPublisher() {
+        return new HttpSessionEventPublisher();
+    }
+
+    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .userDetailsService(userDetailsService)
@@ -33,14 +46,24 @@ public class SecurityConfig {
                                 "/css/**",
                                 "/js/**",
                                 "/img/**",
-                                "/webjars/**"
-                        ).permitAll()
-                        .requestMatchers("/", "/home", "/register").permitAll()
-                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/api/tasks/**").authenticated()
-                        .anyRequest().authenticated()
+                        "/webjars/**"
+                    ).permitAll()
+                    .requestMatchers("/", "/home", "/register").permitAll()
+                    .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                    .requestMatchers("/admin/**").hasRole("ADMIN")
+                    .requestMatchers("/api/tasks/**").authenticated()
+                    .requestMatchers("/api/settings/**").authenticated()
+                    .requestMatchers("/api/account/**").authenticated()
+                    .requestMatchers("/api/reports/**").authenticated()
+                    .anyRequest().authenticated()
+            )
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                        .sessionConcurrency(concurrency -> concurrency
+                                .maximumSessions(10)
+                                .sessionRegistry(sessionRegistry())
+                        )
                 )
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .formLogin(form -> form
                         .loginPage("/login")
                         .loginProcessingUrl("/login")
