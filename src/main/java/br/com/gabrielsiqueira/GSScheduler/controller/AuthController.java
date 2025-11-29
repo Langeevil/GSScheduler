@@ -58,6 +58,9 @@ public class AuthController {
     public String register(@RequestParam String username,
                            @RequestParam String password,
                            @RequestParam String confirm,
+                           @RequestParam(required = false) String firstName,
+                           @RequestParam(required = false) String lastName,
+                           @RequestParam(required = false) String email,
                            Model model) {
         if (!password.equals(confirm)) {
             model.addAttribute("error", "Senhas nao conferem");
@@ -68,6 +71,9 @@ public class AuthController {
             return "auth/register";
         }
         User user = new User(username, passwordEncoder.encode(password), true, "ROLE_USER");
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        user.setEmail(email);
         userRepository.save(user);
         model.addAttribute("success", "Conta criada com sucesso. Acesse o login.");
         return "auth/register";

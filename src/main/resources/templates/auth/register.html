@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <script>
+        (function(){var t=localStorage.getItem('gs_theme')||'light';if(t==='dark')document.documentElement.classList.add('theme-dark');})();
+    </script>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Cadastro - GSScheduler</title>
@@ -39,6 +42,9 @@
         .alert { padding: 12px; border-radius: 6px; margin-bottom: 12px; font-size: 13px; }
         .alert.error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
         .alert.success { background: #d1e7dd; color: #0f5132; border: 1px solid #badbcc; }
+        .app-footer { background: #ffffff; color: #333; margin-top: 24px; padding: 18px 14px; text-align: center; border-radius: 10px; border: 1px solid #e4e4e4; box-shadow: 0 6px 16px rgba(0,0,0,0.08); }
+        .app-footer .hr-container { display: flex; justify-content: center; margin: 8px 0; }
+        .app-footer hr { width: 90%; border: 0; border-top: 2px solid #667eea; opacity: 0.6; }
     </style>
 </head>
 <body>
@@ -50,6 +56,18 @@
         <div th:if="${success}" class="alert success" th:text="${success}"></div>
 
         <form th:action="@{/register}" method="post">
+            <div class="form-group">
+                <label for="firstName">Nome</label>
+                <input id="firstName" name="firstName" />
+            </div>
+            <div class="form-group">
+                <label for="lastName">Sobrenome</label>
+                <input id="lastName" name="lastName" />
+            </div>
+            <div class="form-group">
+                <label for="email">E-mail</label>
+                <input id="email" name="email" type="email" />
+            </div>
             <div class="form-group">
                 <label for="username">Usuario</label>
                 <input id="username" name="username" required />
@@ -66,6 +84,14 @@
         </form>
 
         <p class="muted">Ja tem conta? <a href="/login">Voltar ao login</a></p>
+    </div>
+    <div class="app-footer">
+        <footer>
+            <p>Gabriel da Silva Siqueira</p>
+            <div class="hr-container"><hr></div>
+            <p>Copyright &copy; <script>document.write(new Date().getFullYear())</script>. Todos os direitos reservados.</p>
+            </br>
+        </footer>
     </div>
 </body>
 </html>

@@ -23,13 +23,13 @@ public class UserSetting {
     private String language = "pt-br";
 
     @Column(nullable = false)
-    private boolean emailNotifications = true;
-
-    @Column(nullable = false)
     private int intervalHours = 4;
 
     @Column(nullable = false)
-    private boolean retainHistory = true;
+    private int retentionDays = 30;
+
+    @Column(nullable = false)
+    private boolean twoFactorEnabled = false;
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
@@ -50,16 +50,16 @@ public class UserSetting {
         return language;
     }
 
-    public boolean isEmailNotifications() {
-        return emailNotifications;
-    }
-
     public int getIntervalHours() {
         return intervalHours;
     }
 
-    public boolean isRetainHistory() {
-        return retainHistory;
+    public int getRetentionDays() {
+        return retentionDays;
+    }
+
+    public boolean isTwoFactorEnabled() {
+        return twoFactorEnabled;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -82,16 +82,16 @@ public class UserSetting {
         this.language = language;
     }
 
-    public void setEmailNotifications(boolean emailNotifications) {
-        this.emailNotifications = emailNotifications;
-    }
-
     public void setIntervalHours(int intervalHours) {
         this.intervalHours = intervalHours;
     }
 
-    public void setRetainHistory(boolean retainHistory) {
-        this.retainHistory = retainHistory;
+    public void setRetentionDays(int retentionDays) {
+        this.retentionDays = retentionDays;
+    }
+
+    public void setTwoFactorEnabled(boolean twoFactorEnabled) {
+        this.twoFactorEnabled = twoFactorEnabled;
     }
 
     @PrePersist

@@ -32,9 +32,9 @@ public class SettingsController {
         UserSetting settings = service.findOrCreate(current);
         if (payload.getTheme() != null) settings.setTheme(payload.getTheme());
         if (payload.getLanguage() != null) settings.setLanguage(payload.getLanguage());
-        settings.setEmailNotifications(payload.isEmailNotifications());
         settings.setIntervalHours(payload.getIntervalHours());
-        settings.setRetainHistory(payload.isRetainHistory());
+        settings.setRetentionDays(payload.getRetentionDays());
+        settings.setTwoFactorEnabled(payload.isTwoFactorEnabled());
         return service.save(settings);
     }
 

@@ -1,392 +1,372 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <script>
+        (function() {
+            var t = localStorage.getItem('gs_theme') || 'light';
+            if (t === 'dark') document.documentElement.classList.add('theme-dark');
+        })();
+    </script>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Configurações - GSScheduler</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --bg: #f5f7fb;
+            --panel: #ffffff;
+            --text: #1f2333;
+            --muted: #687086;
+            --border: #e4e7f2;
+            --primary: #667eea;
+            --primary-2: #764ba2;
+            --shadow: rgba(0,0,0,0.08);
+            --danger: #e74c3c;
         }
-
+        .theme-dark {
+            --bg: #0b0d16;
+            --panel: #1d2333;
+            --text: #e8ecf6;
+            --muted: #b5bed5;
+            --border: #2a3144;
+            --primary: #6b7bff;
+            --primary-2: #4f5ae0;
+            --shadow: rgba(0,0,0,0.55);
+            --danger: #e74c3c;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--bg);
+            color: var(--text);
             min-height: 100vh;
             padding: 20px;
+            transition: background-color 0.25s ease, color 0.25s ease;
         }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
+        .container { max-width: 1200px; margin: 0 auto; }
         .header {
-            background: white;
+            background: var(--panel);
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 10px var(--shadow);
             margin-bottom: 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-
-        .header h1 {
-            color: #333;
-            font-size: 24px;
-        }
-
-        .title-icon {
-            width: 26px;
-            height: 26px;
-            margin-right: 10px;
-            color: #667eea;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            vertical-align: middle;
-        }
-
-        .title-icon svg {
-            width: 22px;
-            height: 22px;
-            stroke: currentColor;
-            stroke-width: 1.6;
-            fill: none;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-        }
-
+        .header h1 { color: var(--text); font-size: 24px; display: flex; align-items: center; gap: 8px; }
+        .title-icon { width: 26px; height: 26px; color: var(--primary); }
+        .title-icon svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.6; }
         .btn-secondary {
-            background: #666;
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: transform 0.2s;
-            text-decoration: none;
+            background: #666; color: white; border: none; padding: 12px 25px; border-radius: 5px;
+            cursor: pointer; font-size: 14px; transition: transform 0.2s; text-decoration: none;
         }
-
-        .btn-secondary:hover {
-            transform: translateY(-2px);
+        .btn-secondary:hover { transform: translateY(-2px); }
+        .content { background: var(--panel); padding: 25px; border-radius: 10px; box-shadow: 0 2px 10px var(--shadow); }
+        .content h2 { color: var(--text); font-size: 20px; margin-bottom: 20px; border-bottom: 2px solid var(--primary); padding-bottom: 10px; }
+        .settings-section { margin-bottom: 30px; padding-bottom: 30px; border-bottom: 1px solid var(--border); }
+        .settings-section:last-child { border-bottom: none; }
+        .settings-section h3 { color: var(--primary); font-size: 16px; margin-bottom: 15px; }
+        .setting-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border); }
+        .setting-item:last-child { border-bottom: none; }
+        .setting-label { color: var(--text); font-weight: 500; }
+        .setting-description { color: var(--muted); font-size: 12px; margin-top: 3px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; color: var(--text); font-weight: 500; margin-bottom: 5px; }
+        input[type="text"], input[type="email"], input[type="password"], select {
+            width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 5px; font-size: 14px;
+            background: transparent; color: var(--text);
         }
-
-        .content {
-            background: white;
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .content h2 {
-            color: #333;
-            font-size: 20px;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #667eea;
-            padding-bottom: 10px;
-        }
-
-        .settings-section {
-            margin-bottom: 30px;
-            padding-bottom: 30px;
-            border-bottom: 1px solid #eee;
-        }
-
-        .settings-section:last-child {
-            border-bottom: none;
-        }
-
-        .settings-section h3 {
-            color: #667eea;
-            font-size: 16px;
-            margin-bottom: 15px;
-        }
-
-        .setting-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 0;
-            border-bottom: 1px solid #f0f0f0;
-        }
-
-        .setting-item:last-child {
-            border-bottom: none;
-        }
-
-        .setting-label {
-            color: #333;
-            font-weight: 500;
-        }
-
-        .setting-description {
-            color: #999;
-            font-size: 12px;
-            margin-top: 3px;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        label {
-            display: block;
-            color: #333;
-            font-weight: 500;
-            margin-bottom: 5px;
-        }
-
-        input[type="text"],
-        input[type="email"],
-        select {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 14px;
-        }
-
-        input[type="text"]:focus,
-        input[type="email"]:focus,
-        select:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 5px rgba(102, 126, 234, 0.3);
-        }
-
+        input:focus, select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 5px rgba(102,126,234,0.3); }
         .btn-save {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: transform 0.2s;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-2) 100%);
+            color: white; border: none; padding: 12px 25px; border-radius: 5px; cursor: pointer; font-size: 14px; transition: transform 0.2s;
         }
-
-        .btn-save:hover {
-            transform: translateY(-2px);
-        }
-
-        .breadcrumb {
-            color: #666;
-            font-size: 14px;
-            margin-bottom: 20px;
-        }
-
-        .breadcrumb a {
-            color: #667eea;
-            text-decoration: none;
-        }
-
-        .breadcrumb a:hover {
-            text-decoration: underline;
-        }
-
-        .toggle-switch {
-            position: relative;
-            display: inline-block;
-            width: 50px;
-            height: 24px;
-        }
-
-        .toggle-switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #ccc;
-            transition: 0.3s;
-            border-radius: 24px;
-        }
-
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 18px;
-            width: 18px;
-            left: 3px;
-            bottom: 3px;
-            background-color: white;
-            transition: 0.3s;
-            border-radius: 50%;
-        }
-
-        input:checked + .slider {
-            background-color: #667eea;
-        }
-
-        input:checked + .slider:before {
-            transform: translateX(26px);
-        }
+        .btn-save:hover { transform: translateY(-2px); }
+        .breadcrumb { color: var(--muted); font-size: 14px; margin-bottom: 20px; }
+        .breadcrumb a { color: var(--primary); text-decoration: none; }
+        .breadcrumb a:hover { text-decoration: underline; }
+        .toggle-switch { position: relative; display: inline-block; width: 50px; height: 24px; }
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: 0.3s; border-radius: 24px; }
+        .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: 0.3s; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--primary); }
+        input:checked + .slider:before { transform: translateX(26px); }
+        .modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 15; }
+        .modal { background: var(--panel); padding: 20px; border-radius: 10px; width: 100%; max-width: 420px; box-shadow: 0 10px 30px var(--shadow); }
+        .modal h3 { margin-bottom: 16px; color: var(--text); }
+        .modal .actions { display: flex; gap: 10px; justify-content: flex-end; }
+        .app-footer { background: var(--panel); color: var(--text); margin-top: 30px; padding: 18px 14px; text-align: center; border-radius: 10px; border: 1px solid var(--border); box-shadow: 0 6px 16px var(--shadow); }
+        .app-footer .hr-container { display: flex; justify-content: center; margin: 8px 0; }
+        .app-footer hr { width: 90%; border: 0; border-top: 2px solid var(--primary); opacity: 0.6; }
     </style>
     <script src="/js/app.js"></script>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>
-                <span class="title-icon" aria-hidden="true">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.065 2.572c.94 1.543-.827 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.572-1.065c-1.543.94-3.31-.827-2.37-2.37a1.724 1.724 0 00-1.065-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.572c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
-                        <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                    </svg>
-                </span>
-                Configurações
-            </h1>
-            <a href="/dashboard" class="btn-secondary">Voltar ao Dashboard</a>
-        </div>
-
-        <div class="content">
-            <div class="breadcrumb">
-                <a href="/dashboard">Dashboard</a> / Configurações
-            </div>
-
-            <h2>Preferências da Aplicação</h2>
-
-            <div class="settings-section">
-                <h3>Perfil do Usuário</h3>
-                <div class="setting-item">
-                    <div>
-                        <div class="setting-label">Usuário:</div>
-                        <div class="setting-description" th:text="${#authentication.name}"></div>
-                    </div>
-                </div>
-                <div class="setting-item">
-                    <div>
-                        <div class="setting-label">Função:</div>
-                        <div class="setting-description">
-                            <span th:each="role : ${#authentication.authorities}" 
-                                  th:text="${role}"></span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="settings-section">
-                <h3>Preferências Gerais</h3>
-                <div class="form-group">
-                    <label for="theme">Tema da Aplicação:</label>
-                    <select id="theme">
-                        <option value="light" selected>Claro</option>
-                        <option value="dark">Escuro</option>
-                        <option value="auto">Automático</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="language">Idioma:</label>
-                    <select id="language">
-                        <option value="pt-br" selected>Português (Brasil)</option>
-                        <option value="en">English</option>
-                        <option value="es">Español</option>
-                    </select>
-                </div>
-                <div class="setting-item">
-                    <div class="setting-label">Notificações por Email</div>
-                    <label class="toggle-switch">
-                        <input type="checkbox" checked>
-                        <span class="slider"></span>
-                    </label>
-                </div>
-                <div class="setting-item">
-                    <div class="setting-label">Dois Fatores (2FA)</div>
-                    <label class="toggle-switch">
-                        <input type="checkbox">
-                        <span class="slider"></span>
-                    </label>
-                </div>
-            </div>
-
-            <div class="settings-section">
-                <h3>Agendamento de Tarefas</h3>
-                <div class="setting-item">
-                    <div>
-                        <div class="setting-label">Intervalo padrão de tarefas</div>
-                        <div class="setting-description">Tempo padrão entre execuções agendadas</div>
-                    </div>
-                    <select style="width: 150px;">
-                        <option value="1">1 hora</option>
-                        <option value="4" selected>4 horas</option>
-                        <option value="8">8 horas</option>
-                        <option value="24">1 dia</option>
-                    </select>
-                </div>
-                <div class="setting-item">
-                    <div class="setting-label">Retenção de histórico</div>
-                    <label class="toggle-switch">
-                        <input type="checkbox" checked>
-                        <span class="slider"></span>
-                    </label>
-                </div>
-            </div>
-
-            <div class="settings-section">
-                <h3>Segurança</h3>
-                <button class="btn-save" onclick="alert('Funcionalidade em desenvolvimento')">Alterar Senha</button>
-                <div style="margin-top: 15px;">
-                    <button class="btn-save" style="background: #dc3545;" onclick="alert('Funcionalidade em desenvolvimento')">Sair de Todas as Sessões</button>
-                </div>
-            </div>
-
-            <div style="margin-top: 30px; display: flex; gap: 10px;">
-                <button class="btn-save" id="btn-save">Salvar Configurações</button>
-                <button class="btn-secondary" onclick="location.reload()">Descartar Alterações</button>
-            </div>
-        </div>
+<div class="container">
+    <div class="header">
+        <h1>
+            <span class="title-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.065 2.572c.94 1.543-.827 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.572-1.065c-1.543.94-3.31-.827-2.37-2.37a1.724 1.724 0 00-1.065-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.572c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+            </span>
+            Configurações
+        </h1>
+        <a href="/dashboard" class="btn-secondary">Voltar ao Dashboard</a>
     </div>
 
-    <script>
-        async function loadSettings() {
-            const res = await fetch('/api/settings');
-            if (!res.ok) return;
-            const s = await res.json();
-            document.getElementById('theme').value = s.theme || 'light';
-            document.getElementById('language').value = s.language || 'pt-br';
-            const toggles = document.querySelectorAll('.setting-item input[type="checkbox"]');
-            const selects = document.querySelectorAll('.setting-item select');
-            if (toggles[0]) toggles[0].checked = s.emailNotifications;
-            if (toggles[1]) toggles[1].checked = s.retainHistory;
-            if (selects[0]) selects[0].value = s.intervalHours;
-        }
+    <div class="content">
+        <div class="breadcrumb">
+            <a href="/dashboard">Dashboard</a> / Configurações
+        </div>
 
-        async function saveSettings() {
-            const toggles = document.querySelectorAll('.setting-item input[type="checkbox"]');
-            const selects = document.querySelectorAll('.setting-item select');
-            const payload = {
-                theme: document.getElementById('theme').value,
-                language: document.getElementById('language').value,
-                emailNotifications: toggles[0] ? toggles[0].checked : true,
-                retainHistory: toggles[1] ? toggles[1].checked : true,
-                intervalHours: selects[0] ? parseInt(selects[0].value, 10) : 4
-            };
-            const res = await fetch('/api/settings', {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
-            if (res.ok) {
-                alert('Configurações salvas');
-            } else {
-                alert('Erro ao salvar configurações');
-            }
-        }
+        <h2>Preferências da Aplicação</h2>
 
-        document.getElementById('btn-save').addEventListener('click', saveSettings);
-        AppSettings.initPage(() => { loadSettings(); });
-    </script>
+        <div class="settings-section">
+            <h3>Perfil do Usuário</h3>
+            <div class="form-group">
+                <label for="profileFirst">Nome</label>
+                <input type="text" id="profileFirst" />
+            </div>
+            <div class="form-group">
+                <label for="profileLast">Sobrenome</label>
+                <input type="text" id="profileLast" />
+            </div>
+            <div class="form-group">
+                <label for="profileEmail">E-mail</label>
+                <input type="email" id="profileEmail" />
+            </div>
+            <div class="form-group">
+                <label>Usuário</label>
+                <input type="text" id="profileUsername" disabled />
+            </div>
+            <button class="btn-save" id="btn-save-profile">Salvar Perfil</button>
+        </div>
+
+        <div class="settings-section">
+            <h3>Preferências Gerais</h3>
+            <div class="form-group">
+                <label for="theme">Tema da Aplicação:</label>
+                <select id="theme">
+                    <option value="light" selected>Claro</option>
+                    <option value="dark">Escuro</option>
+                    <option value="auto">Automático</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="language">Idioma:</label>
+                <select id="language">
+                    <option value="pt-br" selected>Português (Brasil)</option>
+                    <option value="en">English</option>
+                    <option value="es">Español</option>
+                </select>
+            </div>
+            <!-- 2FA removido -->
+        </div>
+
+        <div class="settings-section">
+            <h3>Agendamento de Tarefas</h3>
+            <div class="setting-item">
+                <div>
+                    <div class="setting-label">Intervalo padrão de tarefas</div>
+                    <div class="setting-description">Tempo padrão entre execuções agendadas</div>
+                </div>
+                <select style="width: 150px;" id="taskInterval">
+                    <option value="1">1 hora</option>
+                    <option value="4" selected>4 horas</option>
+                    <option value="8">8 horas</option>
+                    <option value="24">1 dia</option>
+                </select>
+            </div>
+            <div class="setting-item">
+                <div>
+                    <div class="setting-label">Retenção de histórico</div>
+                    <div class="setting-description">Quanto tempo manter registros antigos</div>
+                </div>
+                <select style="width: 180px;" id="retentionDays">
+                    <option value="0">Não manter histórico</option>
+                    <option value="7">7 dias</option>
+                    <option value="30" selected>30 dias</option>
+                    <option value="90">90 dias</option>
+                    <option value="180">180 dias</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="settings-section">
+            <h3>Segurança</h3>
+            <button class="btn-save" id="btn-change-password">Alterar Senha</button>
+            <div style="margin-top: 15px;">
+                <button class="btn-save" style="background: #dc3545;" id="btn-logout-all">Sair de Todas as Sessões</button>
+            </div>
+        </div>
+
+        <div style="margin-top: 30px; display: flex; gap: 10px;">
+            <button class="btn-save" id="btn-save">Salvar Configurações</button>
+            <button class="btn-secondary" onclick="location.reload()">Descartar Alterações</button>
+        </div>
+    </div>
+</div>
+
+<div class="app-footer">
+    <footer>
+        <p>Gabriel da Silva Siqueira</p>
+        <div class="hr-container"><hr></div>
+        <p>Copyright &copy; <script>document.write(new Date().getFullYear())</script>. Todos os direitos reservados.</p>
+        </br>
+    </footer>
+</div>
+
+<div class="modal-backdrop" id="password-modal">
+    <div class="modal">
+        <h3>Alterar Senha</h3>
+        <div class="form-group">
+            <label for="currentPassword">Senha atual</label>
+            <input type="password" id="currentPassword" />
+        </div>
+        <div class="form-group">
+            <label for="newPassword">Nova senha</label>
+            <input type="password" id="newPassword" />
+        </div>
+        <div class="form-group">
+            <label for="confirmPassword">Confirmar nova senha</label>
+            <input type="password" id="confirmPassword" />
+        </div>
+        <div class="actions">
+            <button class="btn-secondary" type="button" id="btn-cancel-password">Cancelar</button>
+            <button class="btn-save" type="button" id="btn-submit-password">Salvar</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    async function loadProfile() {
+        const res = await fetch('/api/account/profile');
+        if (!res.ok) return;
+        const p = await res.json();
+        document.getElementById('profileFirst').value = p.firstName || '';
+        document.getElementById('profileLast').value = p.lastName || '';
+        document.getElementById('profileEmail').value = p.email || '';
+        document.getElementById('profileUsername').value = p.username || '';
+    }
+
+    async function saveProfile() {
+        const payload = {
+            firstName: document.getElementById('profileFirst').value.trim(),
+            lastName: document.getElementById('profileLast').value.trim(),
+            email: document.getElementById('profileEmail').value.trim()
+        };
+        const res = await fetch('/api/account/profile', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        if (res.ok) {
+            showToast('Perfil salvo');
+        } else {
+            showToast('Erro ao salvar perfil', false);
+        }
+    }
+
+    async function loadSettings() {
+        const res = await fetch('/api/settings');
+        if (!res.ok) return;
+        const s = await res.json();
+        document.getElementById('theme').value = s.theme || 'light';
+        document.getElementById('language').value = s.language || 'pt-br';
+        document.getElementById('taskInterval').value = s.intervalHours || 4;
+        document.getElementById('retentionDays').value = s.retentionDays ?? 30;
+    }
+
+    async function saveSettings() {
+        const payload = {
+            theme: document.getElementById('theme').value,
+            language: document.getElementById('language').value,
+            intervalHours: parseInt(document.getElementById('taskInterval').value, 10) || 4,
+            retentionDays: parseInt(document.getElementById('retentionDays').value, 10) ?? 30
+        };
+        const res = await fetch('/api/settings', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        if (res.ok) {
+            showToast('Configurações salvas');
+        } else {
+            showToast('Erro ao salvar configurações', false);
+        }
+    }
+
+    function openPasswordModal() {
+        document.getElementById('password-modal').style.display = 'flex';
+    }
+    function closePasswordModal() {
+        document.getElementById('password-modal').style.display = 'none';
+        document.getElementById('currentPassword').value = '';
+        document.getElementById('newPassword').value = '';
+        document.getElementById('confirmPassword').value = '';
+    }
+    async function submitPasswordChange() {
+        const current = document.getElementById('currentPassword').value.trim();
+        const next = document.getElementById('newPassword').value.trim();
+        const confirm = document.getElementById('confirmPassword').value.trim();
+        if (!current || !next) {
+            showToast('Informe a senha atual e a nova senha', false);
+            return;
+        }
+        if (next !== confirm) {
+            showToast('Nova senha e confirmação não coincidem', false);
+            return;
+        }
+        const res = await fetch('/api/account/password', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ currentPassword: current, newPassword: next })
+        });
+        if (res.ok) {
+            showToast('Senha alterada com sucesso');
+            closePasswordModal();
+        } else {
+            const msg = await res.text();
+            showToast(msg || 'Erro ao alterar senha', false);
+        }
+    }
+
+    async function logoutAllSessions() {
+        const res = await fetch('/api/account/logout-all', { method: 'POST' });
+        if (res.ok) {
+            window.location.href = '/login?logout=true';
+        } else {
+            showToast('Erro ao encerrar sessões', false);
+        }
+    }
+
+    function showToast(message, ok = true) {
+        let toast = document.getElementById('toast');
+        if (!toast) {
+            toast = document.createElement('div');
+            toast.id = 'toast';
+            toast.style.position = 'fixed';
+            toast.style.bottom = '20px';
+            toast.style.right = '20px';
+            toast.style.padding = '12px 16px';
+            toast.style.borderRadius = '6px';
+            toast.style.color = '#fff';
+            toast.style.display = 'none';
+            toast.style.zIndex = '30';
+            document.body.appendChild(toast);
+        }
+        toast.textContent = message;
+        toast.style.background = ok ? '#2d8a48' : '#c0392b';
+        toast.style.display = 'block';
+        setTimeout(() => { toast.style.display = 'none'; }, 3000);
+    }
+
+    document.getElementById('btn-save').addEventListener('click', saveSettings);
+    document.getElementById('btn-save-profile').addEventListener('click', saveProfile);
+    document.getElementById('btn-change-password').addEventListener('click', openPasswordModal);
+    document.getElementById('btn-cancel-password').addEventListener('click', closePasswordModal);
+    document.getElementById('btn-submit-password').addEventListener('click', submitPasswordChange);
+    document.getElementById('btn-logout-all').addEventListener('click', logoutAllSessions);
+    AppSettings.initPage(() => { loadProfile(); loadSettings(); });
+</script>
 </body>
 </html>
