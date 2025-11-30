@@ -4,7 +4,7 @@
 
 <head>
     <script>
-        (function() {
+        (function () {
             var t = localStorage.getItem('gs_theme') || 'light';
             if (t === 'dark') document.documentElement.classList.add('theme-dark');
         })();
@@ -205,35 +205,78 @@
             font-size: 12px;
             margin-left: 10px;
         }
+
         .btn-admin {
             display: inline-flex;
             align-items: center;
             gap: 6px;
             padding: 8px 12px;
             border-radius: 8px;
-            border: 1px solid #2a3144;
-            background: rgba(102,126,234,0.12);
-            color: #e8ecf6;
+            border: 1px solid #667eea;
+            background: #f0f3ff;
+            color: #1f2333;
             text-decoration: none;
+            font-weight: 600;
             transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s;
         }
+
         .btn-admin:hover {
             transform: translateY(-1px);
-            box-shadow: 0 8px 18px rgba(0,0,0,0.25);
-            background: rgba(102,126,234,0.2);
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
+            background: #e4e9ff;
         }
-        .app-footer {
-            background: #1d2333;
+
+        .theme-dark .btn-admin {
+            border-color: #9eb1ff;
+            background: rgba(102, 126, 234, 0.15);
             color: #e8ecf6;
-            margin-top: 30px;
+        }
+
+        .theme-dark .btn-admin:hover {
+            background: rgba(102, 126, 234, 0.25);
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.25);
+        }
+
+        .app-footer {
+            background: #ffffff;
+            color: #333;
+            margin: 30px auto 10px auto;
             padding: 18px 14px;
             text-align: center;
-            border-radius: 10px;
-            border: 1px solid #2a3144;
-            box-shadow: 0 8px 18px rgba(0,0,0,0.4);
+            border-radius: 12px;
+            border: 1px solid #e4e4e4;
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+            width: calc(100% - 40px);
+            max-width: 1200px;
         }
-        .app-footer .hr-container { display: flex; justify-content: center; margin: 8px 0; }
-        .app-footer hr { width: 90%; border: 0; border-top: 2px solid #667eea; opacity: 0.6; }
+
+        .theme-dark .app-footer {
+            background: #1d2333;
+            color: #e8ecf6;
+            border-color: #2a3144;
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.4);
+        }
+
+        .app-footer .hr-container {
+            display: flex;
+            justify-content: center;
+            margin: 8px 0;
+        }
+
+        .app-footer hr {
+            width: 90%;
+            border: 0;
+            border-top: 2px solid var(--primary, #667eea);
+            opacity: 0.6;
+        }
+
+        @media (max-width: 900px) {
+            .container { padding: 0 6px; }
+            .header { flex-direction: column; align-items: flex-start; gap: 10px; }
+            .header-right { width: 100%; flex-wrap: wrap; justify-content: flex-start; }
+            .content-grid { grid-template-columns: 1fr; }
+            .tasks-section { padding: 18px; }
+        }
     </style>
     <script src="/js/app.js"></script>
 </head>
@@ -247,7 +290,8 @@
                     Bem-vindo, <strong id="welcome-name"></strong>
                     <span class="role-badge" id="welcome-role"></span>
                     <a id="admin-users" href="/admin/users" class="btn-admin" style="display:none;">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                             <circle cx="9" cy="7" r="4"></circle>
                             <path d="M17 11v-3a4 4 0 10-8 0v3"></path>
                             <path d="M4 21v-2a4 4 0 014-4h2a4 4 0 014 4v2"></path>
@@ -279,7 +323,9 @@
             <div class="card">
                 <div class="card-icon" aria-hidden="true">
                     <svg viewBox="0 0 24 24">
-                        <path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.065 2.572c.94 1.543-.827 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.572-1.065c-1.543.94-3.31-.827-2.37-2.37a1.724 1.724 0 00-1.065-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.572c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                        <path
+                            d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.065 2.572c.94 1.543-.827 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.572-1.065c-1.543.94-3.31-.827-2.37-2.37a1.724 1.724 0 00-1.065-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.572c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z">
+                        </path>
                         <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                     </svg>
                 </div>
@@ -315,12 +361,18 @@
     <div class="app-footer">
         <footer>
             <p>Gabriel da Silva Siqueira</p>
-            <div class="hr-container"><hr></div>
-            <p>Copyright &copy; <script>document.write(new Date().getFullYear())</script>. Todos os direitos reservados.</p>
+            <div class="hr-container">
+                <hr>
+            </div>
+            <p>Copyright &copy;
+                <script>document.write(new Date().getFullYear())</script>. Todos os direitos reservados.
+            </p>
             </br>
         </footer>
     </div>
     <script>
+        let currentLang = 'pt-br';
+
         async function loadRecent() {
             const res = await fetch('/api/tasks?size=5');
             if (!res.ok) return;
@@ -337,10 +389,11 @@
             tasks.forEach(t => {
                 const div = document.createElement('div');
                 div.className = 'task-item';
+                const statusLabel = AppSettings.translateStatus(t.status, currentLang);
                 div.innerHTML = `
                 <h3>${t.title || ''}</h3>
                 <p>${t.description || ''}</p>
-                <span class="task-status">${t.status || ''}</span>
+                <span class="task-status">${statusLabel || ''}</span>
             `;
                 container.appendChild(div);
             });
@@ -357,7 +410,7 @@
                 document.getElementById('admin-users').style.display = 'inline-block';
             }
         }
-        AppSettings.initPage(() => { loadWelcome(); loadRecent(); });
+        AppSettings.initPage((settings) => { currentLang = settings.language || 'pt-br'; loadWelcome(); loadRecent(); });
     </script>
 </body>
 

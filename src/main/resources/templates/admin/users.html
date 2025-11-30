@@ -1,90 +1,217 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <script>
-        (function(){var t=localStorage.getItem('gs_theme')||'light';if(t==='dark')document.documentElement.classList.add('theme-dark');})();
+        (function () { var t = localStorage.getItem('gs_theme') || 'light'; if (t === 'dark') document.documentElement.classList.add('theme-dark'); })();
     </script>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Usuários - Admin</title>
+    <title>Usuarios - Admin</title>
     <style>
-        :root { --bg:#f5f7fb; --panel:#fff; --text:#1f2333; --muted:#687086; --border:#e4e7f2; --primary:#667eea; --primary-2:#764ba2; --shadow:rgba(0,0,0,0.08); }
-        .theme-dark { --bg:#0b0d16; --panel:#1d2333; --text:#e8ecf6; --muted:#b5bed5; --border:#2a3144; --primary:#6b7bff; --primary-2:#4f5ae0; --shadow:rgba(0,0,0,0.55); }
-        *{margin:0;padding:0;box-sizing:border-box;}
-        body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:var(--bg);color:var(--text);padding:20px;transition:background-color .25s ease,color .25s ease;}
-        .container{max-width:1100px;margin:0 auto;}
-        .header{background:var(--panel);padding:18px;border-radius:10px;box-shadow:0 2px 10px var(--shadow);display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;}
-        .btn{border:none;border-radius:6px;padding:10px 14px;cursor:pointer;font-size:14px;transition:transform .2s,box-shadow .2s;}
-        .btn-primary{background:linear-gradient(135deg,var(--primary) 0%,var(--primary-2) 100%);color:#fff;box-shadow:0 8px 20px rgba(102,126,234,0.25);}
-        .btn-secondary{background:#666;color:#fff;}
-        .btn:hover{transform:translateY(-2px);}
-        table{width:100%;border-collapse:collapse;background:var(--panel);box-shadow:0 2px 10px var(--shadow);border-radius:8px;overflow:hidden;}
-        th,td{padding:12px;border-bottom:1px solid var(--border);color:var(--text);}
-        th{background:rgba(0,0,0,0.02);text-align:left;}
-        input,select{width:100%;padding:8px;border:1px solid var(--border);border-radius:6px;background:transparent;color:var(--text);}
-        input:focus,select:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 2px rgba(102,126,234,0.25);}
-        .actions{display:flex;gap:8px;}
-        .toast{position:fixed;bottom:20px;right:20px;padding:12px 16px;border-radius:6px;color:#fff;display:none;z-index:30;}
+        :root {
+            --bg: #f5f7fb;
+            --panel: #ffffff;
+            --text: #1f2333;
+            --muted: #687086;
+            --border: #e4e7f2;
+            --primary: #667eea;
+            --primary-2: #764ba2;
+            --shadow: rgba(0, 0, 0, 0.08);
+        }
+
+        .theme-dark {
+            --bg: #0b0d16;
+            --panel: #1d2333;
+            --text: #e8ecf6;
+            --muted: #b5bed5;
+            --border: #2a3144;
+            --primary: #6b7bff;
+            --primary-2: #4f5ae0;
+            --shadow: rgba(0, 0, 0, 0.55);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 20px;
+            transition: background-color .25s ease, color .25s ease;
+        }
+
+        .theme-dark body {
+            background: #0b0d16;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: var(--panel);
+            padding: 18px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            border: none;
+            border-radius: 6px;
+            padding: 10px 14px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: transform .2s, box-shadow .2s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-2) 100%);
+            color: #fff;
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.25);
+        }
+
+        .btn-secondary {
+            background: #666;
+            color: #fff;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--panel);
+            box-shadow: 0 2px 10px var(--shadow);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            border-bottom: 1px solid var(--border);
+            color: var(--text);
+        }
+
+        th {
+            background: rgba(0, 0, 0, 0.02);
+            text-align: left;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background: #fff;
+            color: var(--text);
+        }
+
+        .theme-dark input,
+        .theme-dark select {
+            background: transparent;
+            color: var(--text);
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.25);
+        }
+
+        .actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 12px 16px;
+            border-radius: 6px;
+            color: #fff;
+            display: none;
+            z-index: 30;
+        }
     </style>
     <script src="/js/app.js"></script>
 </head>
+
 <body>
-<div class="container">
-    <div class="header">
-        <h1>Usuários</h1>
-        <a class="btn btn-secondary" href="/dashboard">Voltar</a>
+    <div class="container">
+        <div class="header">
+            <h1>Usuários</h1>
+            <a class="btn btn-secondary" href="/dashboard">Voltar</a>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Sobrenome</th>
+                    <th>E-mail</th>
+                    <th>Usuário</th>
+                    <th>Role</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody id="user-body">
+                <tr>
+                    <td colspan="6" style="text-align:center;color:var(--muted);padding:20px;">Carregando...</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
-    <table>
-        <thead>
-        <tr>
-            <th>Nome</th>
-            <th>Sobrenome</th>
-            <th>E-mail</th>
-            <th>Usuário</th>
-            <th>Role</th>
-            <th>Ações</th>
-        </tr>
-        </thead>
-        <tbody id="user-body">
-        <tr><td colspan="6" style="text-align:center;color:var(--muted);padding:20px;">Carregando...</td></tr>
-        </tbody>
-    </table>
-</div>
-<div class="toast" id="toast"></div>
-<script>
-    const rolesOptions = [
-        { value: 'ROLE_USER', label: 'Usuário' },
-        { value: 'ROLE_ADMIN', label: 'Admin' }
-    ];
+    <div class="toast" id="toast"></div>
+    <script>
+        const rolesOptions = [
+            { value: 'ROLE_USER', label: 'Usuário' },
+            { value: 'ROLE_ADMIN', label: 'Admin' }
+        ];
 
-    function showToast(msg, ok=true) {
-        const t = document.getElementById('toast');
-        t.textContent = msg;
-        t.style.background = ok ? '#2d8a48' : '#c0392b';
-        t.style.display = 'block';
-        setTimeout(()=> t.style.display='none', 3000);
-    }
+        function showToast(msg, ok = true) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.style.background = ok ? '#2d8a48' : '#c0392b';
+            t.style.display = 'block';
+            setTimeout(() => t.style.display = 'none', 3000);
+        }
 
-    async function loadUsers() {
-        const res = await fetch('/api/admin/users');
-        if (!res.ok) { showToast('Erro ao carregar usuários', false); return; }
-        const users = await res.json();
-        renderUsers(users);
-    }
+        async function loadUsers() {
+            const res = await fetch('/api/admin/users');
+            if (!res.ok) { showToast('Erro ao carregar usuários', false); return; }
+            const users = await res.json();
+            renderUsers(users);
+        }
 
-    function renderUsers(users) {
-        const body = document.getElementById('user-body');
-        body.innerHTML = '';
-        users.forEach(u => {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td><input value="${u.firstName||''}" data-field="firstName"></td>
-                <td><input value="${u.lastName||''}" data-field="lastName"></td>
-                <td><input value="${u.email||''}" data-field="email"></td>
+        function renderUsers(users) {
+            const body = document.getElementById('user-body');
+            body.innerHTML = '';
+            users.forEach(u => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                <td><input value="${u.firstName || ''}" data-field="firstName"></td>
+                <td><input value="${u.lastName || ''}" data-field="lastName"></td>
+                <td><input value="${u.email || ''}" data-field="email"></td>
                 <td>${u.username}</td>
                 <td>
                     <select data-field="roles">
-                        ${rolesOptions.map(r => `<option value="${r.value}" ${u.roles===r.value?'selected':''}>${r.label}</option>`).join('')}
+                        ${rolesOptions.map(r => `<option value="${r.value}" ${u.roles === r.value ? 'selected' : ''}>${r.label}</option>`).join('')}
                     </select>
                 </td>
                 <td class="actions">
@@ -92,40 +219,41 @@
                     <button class="btn btn-secondary" data-action="delete">Excluir</button>
                 </td>
             `;
-            tr.querySelector('[data-action="save"]').addEventListener('click', () => saveUser(u.id, tr));
-            tr.querySelector('[data-action="delete"]').addEventListener('click', () => deleteUser(u.id, tr));
-            body.appendChild(tr);
-        });
-    }
-
-    async function saveUser(id, tr) {
-        const payload = {
-            firstName: tr.querySelector('[data-field="firstName"]').value.trim(),
-            lastName: tr.querySelector('[data-field="lastName"]').value.trim(),
-            email: tr.querySelector('[data-field="email"]').value.trim(),
-            roles: tr.querySelector('[data-field="roles"]').value
-        };
-        const res = await fetch('/api/admin/users/' + id, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-        });
-        if (res.ok) showToast('Usuário salvo');
-        else showToast('Erro ao salvar', false);
-    }
-
-    async function deleteUser(id, tr) {
-        if (!confirm('Ao excluir o usuário, todas as tarefas associadas serão removidas. Confirmar exclusão?')) return;
-        const res = await fetch('/api/admin/users/' + id, { method: 'DELETE' });
-        if (res.ok) {
-            tr.remove();
-            showToast('Usuário excluído');
-        } else {
-            showToast('Erro ao excluir', false);
+                tr.querySelector('[data-action="save"]').addEventListener('click', () => saveUser(u.id, tr));
+                tr.querySelector('[data-action="delete"]').addEventListener('click', () => deleteUser(u.id, tr));
+                body.appendChild(tr);
+            });
         }
-    }
 
-    AppSettings.initPage(() => { loadUsers(); });
-</script>
+        async function saveUser(id, tr) {
+            const payload = {
+                firstName: tr.querySelector('[data-field="firstName"]').value.trim(),
+                lastName: tr.querySelector('[data-field="lastName"]').value.trim(),
+                email: tr.querySelector('[data-field="email"]').value.trim(),
+                roles: tr.querySelector('[data-field="roles"]').value
+            };
+            const res = await fetch('/api/admin/users/' + id, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            if (res.ok) showToast('Usuário salvo');
+            else showToast('Erro ao salvar', false);
+        }
+
+        async function deleteUser(id, tr) {
+            if (!confirm('Ao excluir o usuário, todas as tarefas associadas serão removidas. Confirmar exclusão?')) return;
+            const res = await fetch('/api/admin/users/' + id, { method: 'DELETE' });
+            if (res.ok) {
+                tr.remove();
+                showToast('Usuário excluído');
+            } else {
+                showToast('Erro ao excluir', false);
+            }
+        }
+
+        AppSettings.initPage(() => { loadUsers(); });
+    </script>
 </body>
+
 </html>

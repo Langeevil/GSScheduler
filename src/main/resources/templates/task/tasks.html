@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <script>
-        (function() {
+        (function () {
             var theme = localStorage.getItem('gs_theme') || 'light';
             if (theme === 'dark') {
                 document.documentElement.classList.add('theme-dark');
@@ -21,9 +22,10 @@
             --border: #e4e7f2;
             --primary: #667eea;
             --primary-2: #764ba2;
-            --shadow: rgba(0,0,0,0.08);
+            --shadow: rgba(0, 0, 0, 0.08);
             --danger: #e74c3c;
         }
+
         .theme-dark {
             --bg: #0b0d16;
             --panel: #1d2333;
@@ -32,415 +34,808 @@
             --border: #2a3144;
             --primary: #6b7bff;
             --primary-2: #4f5ae0;
-            --shadow: rgba(0,0,0,0.55);
+            --shadow: rgba(0, 0, 0, 0.55);
             --danger: #e74c3c;
         }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: var(--bg);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: var(--text);
             min-height: 100vh;
             padding: 20px;
             transition: background-color 0.25s ease, color 0.25s ease;
         }
-        .container { max-width: 1300px; margin: 0 auto; }
-        .header {
-            background: var(--panel); padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px var(--shadow);
-            margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; transition: background-color 0.25s ease;
+
+        .theme-dark body {
+            background: #0b0d16;
         }
-        .header h1 { color: var(--text); font-size: 24px; }
-        .header-actions { display: flex; gap: 10px; }
-        .btn { border: none; border-radius: 6px; padding: 12px 16px; cursor: pointer; font-size: 14px; transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s; }
-        .btn-primary { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-2) 100%); color: #fff; box-shadow: 0 8px 20px rgba(102,126,234,0.25); }
-        .btn-secondary { background: #666; color: #fff; }
-        .btn-ghost { background: transparent; color: var(--text); border: 1px solid var(--border); }
-        .btn:hover { transform: translateY(-2px); }
-        .content { background: var(--panel); padding: 25px; border-radius: 10px; box-shadow: 0 2px 10px var(--shadow); transition: background-color 0.25s ease; }
-        .breadcrumb { color: var(--muted); font-size: 14px; margin-bottom: 20px; }
-        .breadcrumb a { color: var(--primary); text-decoration: none; }
-        .breadcrumb a:hover { text-decoration: underline; }
-        h2 { color: var(--text); font-size: 20px; margin-bottom: 16px; }
-        table { width: 100%; border-collapse: collapse; }
-        th { background: rgba(0,0,0,0.02); padding: 12px; text-align: left; border-bottom: 2px solid var(--border); color: var(--text); }
-        td { padding: 12px; border-bottom: 1px solid var(--border); vertical-align: top; color: var(--text); }
-        tr:hover { background: rgba(0,0,0,0.03); }
-        .status-badge { display: inline-block; padding: 6px 10px; border-radius: 4px; font-size: 12px; font-weight: 600; }
-        .status-PENDING { background: #fff3cd; color: #856404; }
-        .status-IN_PROGRESS { background: #cfe2ff; color: #084298; }
-        .status-COMPLETED { background: #d1e7dd; color: #0f5132; }
-        .empty-state { text-align: center; padding: 40px 10px; color: var(--muted); }
-        .modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 10; }
-        .modal { background: var(--panel); padding: 20px; border-radius: 10px; width: 100%; max-width: 520px; box-shadow: 0 10px 30px var(--shadow); transition: background-color 0.25s ease; }
-        .modal h3 { margin-bottom: 16px; color: var(--text); }
-        .form-group { margin-bottom: 14px; }
-        .form-group label { display: block; margin-bottom: 6px; color: var(--text); font-weight: 600; font-size: 13px; }
-        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 14px; background: transparent; color: var(--text); transition: border-color 0.2s; }
-        .form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 2px rgba(102,126,234,0.25); }
-        .actions { display: flex; gap: 8px; }
-        .toast { position: fixed; bottom: 20px; right: 20px; background: #333; color: #fff; padding: 12px 16px; border-radius: 6px; display: none; }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: var(--panel);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px var(--shadow);
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.25s ease;
+        }
+
+        .header h1 {
+            color: var(--text);
+            font-size: 24px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            border: none;
+            border-radius: 6px;
+            padding: 12px 16px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-2) 100%);
+            color: #fff;
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.25);
+        }
+
+        .btn-secondary {
+            background: #666;
+            color: #fff;
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .content {
+            background: var(--panel);
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px var(--shadow);
+            transition: background-color 0.25s ease;
+        }
+
+        .breadcrumb {
+            color: var(--muted);
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .breadcrumb a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        h2 {
+            color: var(--text);
+            font-size: 20px;
+            margin-bottom: 16px;
+        }
+
+        #task-table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 720px;
+        }
+
+        th {
+            background: rgba(0, 0, 0, 0.02);
+            padding: 12px;
+            text-align: left;
+            border-bottom: 2px solid var(--border);
+            color: var(--text);
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid var(--border);
+            vertical-align: top;
+            color: var(--text);
+        }
+
+        tr:hover {
+            background: rgba(0, 0, 0, 0.03);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-PENDING {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-IN_PROGRESS {
+            background: #cfe2ff;
+            color: #084298;
+        }
+
+        .status-COMPLETED {
+            background: #d1e7dd;
+            color: #0f5132;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 10px;
+            color: var(--muted);
+        }
+
+        .modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+
+        .modal {
+            background: var(--panel);
+            padding: 20px;
+            border-radius: 10px;
+            width: 100%;
+            max-width: 520px;
+            box-shadow: 0 10px 30px var(--shadow);
+            transition: background-color 0.25s ease;
+        }
+
+        .modal h3 {
+            margin-bottom: 16px;
+            color: var(--text);
+        }
+
+        .form-group {
+            margin-bottom: 14px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            color: var(--text);
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 14px;
+            background: transparent;
+            color: var(--text);
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.25);
+        }
+
+        .actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #333;
+            color: #fff;
+            padding: 12px 16px;
+            border-radius: 6px;
+            display: none;
+        }
 
         /* Kanban */
-        .view-switch { display: flex; gap: 8px; margin-bottom: 16px; }
-        .kanban { display: none; gap: 16px; }
-        .kanban.active { display: grid; grid-template-columns: repeat(auto-fit,minmax(300px,1fr)); }
-        .column { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 14px; min-height: 200px; box-shadow: 0 2px 8px var(--shadow); }
-        .column h3 { margin-bottom: 12px; color: var(--text); display: flex; justify-content: space-between; align-items: center; }
-        .card { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 10px; margin-bottom: 10px; cursor: grab; box-shadow: 0 4px 10px var(--shadow); transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.2s; }
-        .card:hover { box-shadow: 0 8px 18px var(--shadow); transform: translateY(-1px); }
-        .card.dragging { opacity: 0.7; transform: rotate(1deg) scale(1.02); }
-        .card.pop { animation: pop-in 0.2s ease; }
-        .card-title { font-weight: 700; color: var(--text); margin-bottom: 6px; }
-        .card-desc { color: var(--muted); font-size: 13px; margin-bottom: 8px; }
-        .card-meta { font-size: 12px; color: var(--muted); display: flex; justify-content: space-between; align-items: center; gap: 6px; }
-        .dropzone { min-height: 40px; padding: 4px; border: 1px dashed transparent; border-radius: 6px; transition: border-color 0.2s, background-color 0.2s; }
-        .dropzone.over { border-color: var(--primary); background: rgba(102,126,234,0.08); }
-        .kanban-form { background: var(--panel); border: 1px dashed var(--border); border-radius: 8px; padding: 10px; margin-bottom: 10px; }
-        .kanban-form input, .kanban-form textarea { width: 100%; margin-bottom: 6px; padding: 8px; border: 1px solid var(--border); border-radius: 6px; background: transparent; color: var(--text); }
-        .app-footer { background: var(--panel); color: var(--text); margin-top: 30px; padding: 18px 14px; text-align: center; border-radius: 10px; border: 1px solid var(--border); box-shadow: 0 6px 16px var(--shadow); }
-        .app-footer .hr-container { display: flex; justify-content: center; margin: 8px 0; }
-        .app-footer hr { width: 90%; border: 0; border-top: 2px solid var(--primary); opacity: 0.6; }
-        input[type="datetime-local"]::-webkit-calendar-picker-indicator { filter: invert(0); }
-        .theme-dark input[type="datetime-local"]::-webkit-calendar-picker-indicator { filter: invert(1); }
+        .view-switch {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .kanban {
+            display: none;
+            gap: 16px;
+        }
+
+        .kanban.active {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        }
+
+        .column {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 14px;
+            min-height: 200px;
+            box-shadow: 0 2px 8px var(--shadow);
+        }
+
+        .column h3 {
+            margin-bottom: 12px;
+            color: var(--text);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 10px;
+            cursor: grab;
+            box-shadow: 0 4px 10px var(--shadow);
+            transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.2s;
+        }
+
+        .card:hover {
+            box-shadow: 0 8px 18px var(--shadow);
+            transform: translateY(-1px);
+        }
+
+        .card.dragging {
+            opacity: 0.7;
+            transform: rotate(1deg) scale(1.02);
+        }
+
+        .card.pop {
+            animation: pop-in 0.2s ease;
+        }
+
+        .card-title {
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 6px;
+        }
+
+        .card-desc {
+            color: var(--muted);
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .card-meta {
+            font-size: 12px;
+            color: var(--muted);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .dropzone {
+            min-height: 40px;
+            padding: 4px;
+            border: 1px dashed transparent;
+            border-radius: 6px;
+            transition: border-color 0.2s, background-color 0.2s;
+        }
+
+        .dropzone.over {
+            border-color: var(--primary);
+            background: rgba(102, 126, 234, 0.08);
+        }
+
+        .kanban-form {
+            background: var(--panel);
+            border: 1px dashed var(--border);
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        .kanban-form input,
+        .kanban-form textarea {
+            width: 100%;
+            margin-bottom: 6px;
+            padding: 8px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--text);
+        }
+
+        .app-footer {
+            background: var(--panel);
+            color: var(--text);
+            margin: 30px auto 10px auto;
+            padding: 18px 14px;
+            text-align: center;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            box-shadow: 0 6px 16px var(--shadow);
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .app-footer .hr-container {
+            display: flex;
+            justify-content: center;
+            margin: 8px 0;
+        }
+
+        .app-footer hr {
+            width: 90%;
+            border: 0;
+            border-top: 2px solid var(--primary);
+            opacity: 0.6;
+        }
+
+        input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+            filter: invert(0);
+        }
+
+        .theme-dark input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+            filter: invert(1);
+        }
 
         @keyframes pop-in {
-            from { transform: scale(0.95); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
+            from {
+                transform: scale(0.95);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
         }
-        .row-fade { animation: pop-in 0.18s ease; }
+
+        .row-fade {
+            animation: pop-in 0.18s ease;
+        }
+
+        @media (max-width: 900px) {
+            .container {
+                padding: 0 6px;
+            }
+
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .header-actions {
+                width: 100%;
+                flex-wrap: wrap;
+            }
+
+            .view-switch {
+                flex-wrap: wrap;
+            }
+
+            .content,
+            .header {
+                padding: 16px;
+            }
+
+            .kanban.active {
+                grid-template-columns: 1fr;
+            }
+
+            .column {
+                min-width: auto;
+            }
+        }
     </style>
     <script src="/js/app.js"></script>
 </head>
+
 <body>
-<div class="container">
-    <div class="header">
-        <h1 data-i18n="tasks_title">Minhas Tarefas</h1>
-        <div class="header-actions">
-            <a class="btn btn-secondary" href="/dashboard" data-i18n="back_dashboard">Voltar ao Dashboard</a>
-            <button class="btn btn-primary" id="btn-new-task" data-i18n="new_task">+ Nova Tarefa</button>
-        </div>
-    </div>
-
-    <div class="content">
-        <div class="breadcrumb">
-            <a href="/dashboard" data-i18n="dashboard">Dashboard</a> / <span data-i18n="tasks">Tarefas</span>
-        </div>
-
-        <div class="view-switch">
-            <button class="btn btn-primary" id="btn-view-list">Modo Lista</button>
-            <button class="btn btn-ghost" id="btn-view-kanban">Modo Kanban</button>
-        </div>
-
-        <div id="list-view">
-            <h2 data-i18n="list_title">Lista de Tarefas</h2>
-            <div id="task-table-wrapper">
-                <div class="empty-state" id="empty-state" data-i18n="empty_tasks">Nenhuma tarefa cadastrada. Clique em "+ Nova Tarefa" para criar.</div>
-                <table id="task-table" style="display:none">
-                    <thead>
-                    <tr>
-                        <th>Título</th>
-                        <th>Status</th>
-                        <th>Agendada para</th>
-                        <th>Descrição</th>
-                        <th>Ações</th>
-                    </tr>
-                    </thead>
-                    <tbody id="task-body"></tbody>
-                </table>
+    <div class="container">
+        <div class="header">
+            <h1 data-i18n="tasks_title">Minhas Tarefas</h1>
+            <div class="header-actions">
+                <a class="btn btn-secondary" href="/dashboard" data-i18n="back_dashboard">Voltar ao Dashboard</a>
+                <button class="btn btn-primary" id="btn-new-task" data-i18n="new_task">+ Nova Tarefa</button>
             </div>
         </div>
 
-        <div id="kanban-view" class="kanban">
-            <div class="column" data-status="PENDING">
-                <h3>Pendentes</h3>
-                <div class="kanban-form">
-                    <input type="text" id="kanban-title" placeholder="Título da tarefa" />
-                    <textarea id="kanban-desc" rows="2" placeholder="Descrição (opcional)"></textarea>
-                    <button class="btn btn-primary" id="btn-kanban-add">Adicionar</button>
+        <div class="content">
+            <div class="breadcrumb">
+                <a href="/dashboard" data-i18n="dashboard">Dashboard</a> / <span data-i18n="tasks">Tarefas</span>
+            </div>
+
+            <div class="view-switch">
+                <button class="btn btn-primary" id="btn-view-list" data-i18n="view_list">Modo Lista</button>
+                <button class="btn btn-ghost" id="btn-view-kanban" data-i18n="view_kanban">Modo Kanban</button>
+            </div>
+
+            <div id="list-view">
+                <h2 data-i18n="list_title">Lista de Tarefas</h2>
+                <div id="task-table-wrapper">
+                    <div class="empty-state" id="empty-state" data-i18n="empty_tasks">Nenhuma tarefa cadastrada. Clique
+                        em "+ Nova Tarefa" para criar.</div>
+                    <table id="task-table" style="display:none">
+                        <thead>
+                            <tr>
+                                <th data-i18n="table_title">Titulo</th>
+                                <th data-i18n="table_status">Status</th>
+                                <th data-i18n="table_schedule">Agendada para</th>
+                                <th data-i18n="table_description">Descricao</th>
+                                <th data-i18n="table_actions">Acoes</th>
+                            </tr>
+                        </thead>
+                        <tbody id="task-body"></tbody>
+                    </table>
                 </div>
-                <div class="dropzone" data-status="PENDING"></div>
             </div>
-            <div class="column" data-status="IN_PROGRESS">
-                <h3>Em progresso</h3>
-                <div class="dropzone" data-status="IN_PROGRESS"></div>
-            </div>
-            <div class="column" data-status="COMPLETED">
-                <h3>Concluídas</h3>
-                <div class="dropzone" data-status="COMPLETED"></div>
+
+            <div id="kanban-view" class="kanban">
+                <div class="column" data-status="PENDING">
+                    <h3 data-i18n="kanban_pending">Pendentes</h3>
+                    <div class="kanban-form">
+                        <input type="text" id="kanban-title" placeholder="Titulo da tarefa" />
+                        <textarea id="kanban-desc" rows="2" placeholder="Descricao (opcional)"></textarea>
+                        <button class="btn btn-primary" id="btn-kanban-add" data-i18n="kanban_add">Adicionar</button>
+                    </div>
+                    <div class="dropzone" data-status="PENDING"></div>
+                </div>
+                    <h3 data-i18n="kanban_in_progress">Em progresso</h3>
+                    <h3>Em progresso</h3>
+                    <div class="dropzone" data-status="IN_PROGRESS"></div>
+                </div>
+                <div class="column" data-status="COMPLETED">
+                    <h3 data-i18n="kanban_completed">Concluidas</h3>
+                    <div class="dropzone" data-status="COMPLETED"></div>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<div class="modal-backdrop" id="modal">
-    <div class="modal">
-        <h3 id="modal-title">Nova Tarefa</h3>
-        <form id="task-form">
-            <input type="hidden" id="task-id" />
-            <div class="form-group">
-                <label for="title">Título</label>
-                <input id="title" name="title" required />
-            </div>
-            <div class="form-group">
-                <label for="description">Descrição</label>
-                <textarea id="description" name="description" rows="3"></textarea>
-            </div>
-            <div class="form-group">
-                <label for="scheduledAt">Agendar para</label>
-                <input id="scheduledAt" name="scheduledAt" type="datetime-local" />
-            </div>
-            <div class="form-group">
-                <label for="status">Status</label>
-                <select id="status" name="status">
-                    <option value="PENDING">Pendente</option>
-                    <option value="IN_PROGRESS">Em progresso</option>
-                    <option value="COMPLETED">Concluída</option>
-                </select>
-            </div>
-            <div class="actions">
-                <button type="button" class="btn btn-secondary" id="btn-cancel">Cancelar</button>
-                <button type="submit" class="btn btn-primary">Salvar</button>
-            </div>
-        </form>
+    <div class="modal-backdrop" id="modal">
+        <div class="modal">
+            <h3 id="modal-title" data-i18n="modal_new_task">Nova Tarefa</h3>
+            <form id="task-form">
+                <input type="hidden" id="task-id" />
+                <div class="form-group">
+                    <label for="title">Título</label>
+                    <input id="title" name="title" required />
+                    <label for="title" data-i18n="label_title">Titulo</label>
+                    <input id="title" name="title" required />
+                    <label for="description">Descrição</label>
+                    <textarea id="description" name="description" rows="3"></textarea>
+                    <label for="description" data-i18n="label_description">Descricao</label>
+                    <textarea id="description" name="description" rows="3"></textarea>
+                    <label for="scheduledAt">Agendar para</label>
+                    <input id="scheduledAt" name="scheduledAt" type="datetime-local" />
+                    <label for="scheduledAt" data-i18n="label_schedule">Agendar para</label>
+                    <input id="scheduledAt" name="scheduledAt" type="datetime-local" />
+                    <label for="status">Status</label>
+                    <select id="status" name="status">
+                    <label for="status" data-i18n="label_status">Status</label>
+                        <option value="IN_PROGRESS">Em progresso</option>
+                        <option value="PENDING" data-i18n="option_pending">Pendente</option>
+                        <option value="IN_PROGRESS" data-i18n="option_in_progress">Em progresso</option>
+                        <option value="COMPLETED" data-i18n="option_completed">Concluida</option>
+                <div class="actions">
+                    <button type="button" class="btn btn-secondary" id="btn-cancel">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                    <button type="button" class="btn btn-secondary" id="btn-cancel" data-i18n="btn_cancel">Cancelar</button>
+                    <button type="submit" class="btn btn-primary" data-i18n="btn_save">Salvar</button>
+        </div>
     </div>
-</div>
 
-<div class="toast" id="toast"></div>
-<div class="app-footer">
-    <footer>
-        <p>Gabriel da Silva Siqueira</p>
-        <div class="hr-container"><hr></div>
-        <p>Copyright &copy; <script>document.write(new Date().getFullYear())</script>. Todos os direitos reservados.</p>
-        </br>
-    </footer>
-</div>
+    <div class="toast" id="toast"></div>
+    <div class="app-footer">
+        <footer>
+            <p>Gabriel da Silva Siqueira</p>
+            <div class="hr-container">
+                <hr>
+            </div>
+            <p>Copyright &copy;
+                <script>document.write(new Date().getFullYear())</script>. Todos os direitos reservados.
+            </p>
+            </br>
+        </footer>
+    </div>
 
-<script>
-    const modal = document.getElementById('modal');
-    const form = document.getElementById('task-form');
-    const table = document.getElementById('task-table');
-    const tbody = document.getElementById('task-body');
-    const emptyState = document.getElementById('empty-state');
-    const toast = document.getElementById('toast');
-    const listView = document.getElementById('list-view');
-    const kanbanView = document.getElementById('kanban-view');
-    const dropzones = Array.from(document.querySelectorAll('.dropzone'));
-    let taskCache = [];
+    <script>
+        const modal = document.getElementById('modal');
+        const form = document.getElementById('task-form');
+        const table = document.getElementById('task-table');
+        const tbody = document.getElementById('task-body');
+        const emptyState = document.getElementById('empty-state');
+        const toast = document.getElementById('toast');
+        const listView = document.getElementById('list-view');
+        const kanbanView = document.getElementById('kanban-view');
+        const dropzones = Array.from(document.querySelectorAll('.dropzone'));
+        let currentLang = 'pt-br';
+        const t = (key) => AppSettings.translateKey(key, currentLang);
+        let taskCache = [];
 
-    document.getElementById('btn-new-task').addEventListener('click', () => openModal());
-    document.getElementById('btn-cancel').addEventListener('click', closeModal);
-    document.getElementById('btn-view-list').addEventListener('click', () => switchView('list'));
-    document.getElementById('btn-view-kanban').addEventListener('click', () => switchView('kanban'));
-    document.getElementById('btn-kanban-add').addEventListener('click', createKanbanTask);
+        document.getElementById('btn-new-task').addEventListener('click', () => openModal());
+        document.getElementById('btn-cancel').addEventListener('click', closeModal);
+        document.getElementById('btn-view-list').addEventListener('click', () => switchView('list'));
+        document.getElementById('btn-view-kanban').addEventListener('click', () => switchView('kanban'));
+        document.getElementById('btn-kanban-add').addEventListener('click', createKanbanTask);
 
-    function switchView(view) {
-        if (view === 'kanban') {
-            kanbanView.classList.add('active');
-            listView.style.display = 'none';
-            document.getElementById('btn-view-kanban').className = 'btn btn-primary';
-            document.getElementById('btn-view-list').className = 'btn btn-ghost';
-        } else {
-            kanbanView.classList.remove('active');
-            listView.style.display = 'block';
-            document.getElementById('btn-view-kanban').className = 'btn btn-ghost';
-            document.getElementById('btn-view-list').className = 'btn btn-primary';
+        function applyDynamicTexts() {
+            document.getElementById('btn-view-list').textContent = t('view_list');
+            document.getElementById('btn-view-kanban').textContent = t('view_kanban');
+            document.getElementById('kanban-title').placeholder = t('kanban_title_placeholder');
+            document.getElementById('kanban-desc').placeholder = t('kanban_desc_placeholder');
+            const optPending = document.querySelector('#status option[value="PENDING"]');
+            const optProgress = document.querySelector('#status option[value="IN_PROGRESS"]');
+            const optCompleted = document.querySelector('#status option[value="COMPLETED"]');
+            if (optPending) optPending.textContent = t('option_pending');
+            if (optProgress) optProgress.textContent = t('option_in_progress');
+            if (optCompleted) optCompleted.textContent = t('option_completed');
+            const cancelBtn = document.getElementById('btn-cancel');
+            if (cancelBtn) cancelBtn.textContent = t('btn_cancel');
+            const submitBtn = document.querySelector('button[type="submit"]');
+            if (submitBtn) submitBtn.textContent = t('btn_save');
         }
-    }
 
-    function openModal(task) {
-        modal.style.display = 'flex';
-        document.getElementById('modal-title').textContent = task ? 'Editar Tarefa' : 'Nova Tarefa';
-        document.getElementById('task-id').value = task?.id || '';
-        document.getElementById('title').value = task?.title || '';
-        document.getElementById('description').value = task?.description || '';
-        document.getElementById('status').value = task?.status || 'PENDING';
-        document.getElementById('scheduledAt').value = task?.scheduledAt ? task.scheduledAt.slice(0,16) : '';
-    }
-    function closeModal() { modal.style.display = 'none'; }
-
-    function showToast(message, ok = true) {
-        toast.textContent = message;
-        toast.style.background = ok ? '#2d8a48' : '#c0392b';
-        toast.style.display = 'block';
-        setTimeout(() => toast.style.display = 'none', 3000);
-    }
-
-    async function fetchTasks() {
-        const res = await fetch('/api/tasks?size=200');
-        if (!res.ok) { showToast('Erro ao carregar tarefas', false); return; }
-        const page = await res.json();
-        taskCache = page.content || [];
-        renderTasks(taskCache);
-        renderKanban(taskCache);
-    }
-
-    function renderTasks(tasks) {
-        tbody.innerHTML = '';
-        if (!tasks.length) {
-            table.style.display = 'none';
-            emptyState.style.display = 'block';
-            return;
+        function switchView(view) {
+            if (view === 'kanban') {
+                kanbanView.classList.add('active');
+                listView.style.display = 'none';
+                document.getElementById('btn-view-kanban').className = 'btn btn-primary';
+                document.getElementById('btn-view-list').className = 'btn btn-ghost';
+            } else {
+                kanbanView.classList.remove('active');
+                listView.style.display = 'block';
+                document.getElementById('btn-view-kanban').className = 'btn btn-ghost';
+                document.getElementById('btn-view-list').className = 'btn btn-primary';
+            }
         }
-        table.style.display = '';
-        emptyState.style.display = 'none';
-        tasks.forEach(task => {
-            const tr = document.createElement('tr');
-            tr.classList.add('row-fade');
-            tr.innerHTML = `
+
+        function openModal(task) {
+            modal.style.display = 'flex';
+            document.getElementById('modal-title').textContent = task ? t('modal_edit_task') : t('modal_new_task');
+            document.getElementById('task-id').value = task?.id || '';
+            document.getElementById('title').value = task?.title || '';
+            document.getElementById('description').value = task?.description || '';
+            document.getElementById('status').value = task?.status || 'PENDING';
+            document.getElementById('scheduledAt').value = task?.scheduledAt ? task.scheduledAt.slice(0, 16) : '';
+        }
+        function closeModal() { modal.style.display = 'none'; }
+
+        function showToast(message, ok = true) {
+            toast.textContent = message;
+            toast.style.background = ok ? '#2d8a48' : '#c0392b';
+            toast.style.display = 'block';
+            setTimeout(() => toast.style.display = 'none', 3000);
+        }
+
+        async function fetchTasks() {
+            const res = await fetch('/api/tasks?size=200');
+            if (!res.ok) { showToast(t('toast_load_error'), false); return; }
+            const page = await res.json();
+            taskCache = page.content || [];
+            renderTasks(taskCache);
+            renderKanban(taskCache);
+        }
+
+        function renderTasks(tasks) {
+            tbody.innerHTML = '';
+            if (!tasks.length) {
+                table.style.display = 'none';
+                emptyState.style.display = 'block';
+                return;
+            }
+            table.style.display = '';
+            emptyState.style.display = 'none';
+            tasks.forEach(task => {
+                const tr = document.createElement('tr');
+                tr.classList.add('row-fade');
+                const statusLabel = AppSettings.translateStatus(task.status, currentLang);
+                tr.innerHTML = `
                 <td>${task.title || ''}</td>
-                <td><span class="status-badge status-${task.status}">${task.status || ''}</span></td>
+                <td><span class="status-badge status-${task.status}">${statusLabel || ''}</span></td>
                 <td>${task.scheduledAt ? formatDate(task.scheduledAt) : '-'}</td>
                 <td>${task.description || ''}</td>
                 <td class="actions">
-                    <button class="btn btn-secondary" data-action="edit">Editar</button>
-                    <button class="btn btn-primary" data-action="done">Concluir</button>
-                    <button class="btn btn-secondary" data-action="delete">Excluir</button>
+                    <button class="btn btn-secondary" data-action="edit">${t('btn_edit')}</button>
+                    <button class="btn btn-primary" data-action="done">${t('btn_done')}</button>
+                    <button class="btn btn-secondary" data-action="delete">${t('btn_delete')}</button>
                 </td>
             `;
-            tr.querySelector('[data-action="edit"]').addEventListener('click', () => openModal(task));
-            tr.querySelector('[data-action="done"]').addEventListener('click', () => updateStatus(task.id, 'COMPLETED'));
-            tr.querySelector('[data-action="delete"]').addEventListener('click', () => deleteTask(task.id));
-            tbody.appendChild(tr);
-        });
-    }
+                tr.querySelector('[data-action="edit"]').addEventListener('click', () => openModal(task));
+                tr.querySelector('[data-action="done"]').addEventListener('click', () => updateStatus(task.id, 'COMPLETED'));
+                tr.querySelector('[data-action="delete"]').addEventListener('click', () => deleteTask(task.id));
+                tbody.appendChild(tr);
+            });
+        }
 
-    function renderKanban(tasks) {
-        dropzones.forEach(zone => {
-            zone.innerHTML = '';
-            zone.classList.remove('over');
-            const status = zone.getAttribute('data-status');
-            const items = tasks.filter(t => t.status === status);
-            if (!items.length) {
-                const empty = document.createElement('div');
-                empty.className = 'empty-state';
-                empty.textContent = 'Sem tarefas';
-                zone.appendChild(empty);
-            } else {
-                items.forEach(task => {
-                    const card = document.createElement('div');
-                    card.className = 'card';
-                    card.classList.add('pop');
-                    card.draggable = true;
-                    card.dataset.id = task.id;
-                    card.dataset.status = task.status;
-                    card.innerHTML = `
+        function renderKanban(tasks) {
+            dropzones.forEach(zone => {
+                zone.innerHTML = '';
+                zone.classList.remove('over');
+                const status = zone.getAttribute('data-status');
+                const items = tasks.filter(t => t.status === status);
+                if (!items.length) {
+                    const empty = document.createElement('div');
+                    empty.className = 'empty-state';
+                    empty.textContent = t('empty_kanban');
+                    zone.appendChild(empty);
+                } else {
+                    items.forEach(task => {
+                        const card = document.createElement('div');
+                        card.className = 'card';
+                        card.classList.add('pop');
+                        card.draggable = true;
+                        card.dataset.id = task.id;
+                        card.dataset.status = task.status;
+                        card.innerHTML = `
                         <div class="card-title">${task.title || ''}</div>
                         <div class="card-desc">${task.description || ''}</div>
                         <div class="card-meta">
-                            <span>${task.scheduledAt ? formatDate(task.scheduledAt) : 'Sem agendamento'}</span>
+                            <span>${task.scheduledAt ? formatDate(task.scheduledAt) : t('no_schedule')}</span>
                             <span>
-                                <button class="btn btn-ghost" data-action="edit">Editar</button>
-                                <button class="btn btn-ghost" data-action="delete">Excluir</button>
+                                <button class="btn btn-ghost" data-action="edit">${t('btn_edit')}</button>
+                                <button class="btn btn-ghost" data-action="delete">${t('btn_delete')}</button>
                             </span>
                         </div>
                     `;
-                    card.addEventListener('dragstart', handleDragStart);
-                    card.addEventListener('dragend', handleDragEnd);
-                    card.querySelector('[data-action="edit"]').addEventListener('click', () => openModal(task));
-                    card.querySelector('[data-action="delete"]').addEventListener('click', () => deleteTask(task.id));
-                    zone.appendChild(card);
-                });
+                        card.addEventListener('dragstart', handleDragStart);
+                        card.addEventListener('dragend', handleDragEnd);
+                        card.querySelector('[data-action="edit"]').addEventListener('click', () => openModal(task));
+                        card.querySelector('[data-action="delete"]').addEventListener('click', () => deleteTask(task.id));
+                        zone.appendChild(card);
+                    });
+                }
+            });
+        }
+
+        function handleDragStart(e) {
+            e.dataTransfer.setData('text/plain', e.target.dataset.id);
+            e.target.classList.add('dragging');
+            dropzones.forEach(z => z.classList.add('over'));
+        }
+        function handleDragEnd() {
+            dropzones.forEach(z => z.classList.remove('over'));
+            document.querySelectorAll('.card.dragging').forEach(c => c.classList.remove('dragging'));
+        }
+        dropzones.forEach(zone => {
+            zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('over'); });
+            zone.addEventListener('dragleave', () => zone.classList.remove('over'));
+            zone.addEventListener('drop', e => {
+                e.preventDefault();
+                zone.classList.remove('over');
+                const id = e.dataTransfer.getData('text/plain');
+                const newStatus = zone.getAttribute('data-status');
+                updateStatus(id, newStatus, true);
+            });
+        });
+
+        function formatDate(val) {
+            const d = new Date(val);
+            const locale = currentLang === 'en' ? 'en-US' : currentLang === 'es' ? 'es-ES' : 'pt-BR';
+            return d.toLocaleString(locale, { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+        }
+
+        function toIsoLocal(inputValue) {
+            const d = new Date(inputValue);
+            d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+            return d.toISOString().slice(0, 19);
+        }
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('task-id').value;
+            const payload = {
+                title: document.getElementById('title').value.trim(),
+                description: document.getElementById('description').value.trim(),
+                status: document.getElementById('status').value,
+                scheduledAt: document.getElementById('scheduledAt').value ? toIsoLocal(document.getElementById('scheduledAt').value) : null
+            };
+            if (!payload.title) { showToast(t('toast_title_required'), false); return; }
+            const method = id ? 'PUT' : 'POST';
+            const url = id ? `/api/tasks/${id}` : '/api/tasks';
+            const res = await fetch(url, {
+                method,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            if (res.ok) {
+                showToast(t('toast_save_ok'));
+                closeModal();
+                fetchTasks();
+            } else {
+                showToast(t('toast_save_error'), false);
             }
         });
-    }
 
-    function handleDragStart(e) {
-        e.dataTransfer.setData('text/plain', e.target.dataset.id);
-        e.target.classList.add('dragging');
-        dropzones.forEach(z => z.classList.add('over'));
-    }
-    function handleDragEnd() {
-        dropzones.forEach(z => z.classList.remove('over'));
-        document.querySelectorAll('.card.dragging').forEach(c => c.classList.remove('dragging'));
-    }
-    dropzones.forEach(zone => {
-        zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('over'); });
-        zone.addEventListener('dragleave', () => zone.classList.remove('over'));
-        zone.addEventListener('drop', e => {
-            e.preventDefault();
-            zone.classList.remove('over');
-            const id = e.dataTransfer.getData('text/plain');
-            const newStatus = zone.getAttribute('data-status');
-            updateStatus(id, newStatus, true);
-        });
-    });
-
-    function formatDate(val) {
-        const d = new Date(val);
-        return d.toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
-    }
-
-    function toIsoLocal(inputValue) {
-        const d = new Date(inputValue);
-        d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
-        return d.toISOString().slice(0, 19);
-    }
-
-    form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const id = document.getElementById('task-id').value;
-        const payload = {
-            title: document.getElementById('title').value.trim(),
-            description: document.getElementById('description').value.trim(),
-            status: document.getElementById('status').value,
-            scheduledAt: document.getElementById('scheduledAt').value ? toIsoLocal(document.getElementById('scheduledAt').value) : null
-        };
-        if (!payload.title) { showToast('Informe um título', false); return; }
-        const method = id ? 'PUT' : 'POST';
-        const url = id ? `/api/tasks/${id}` : '/api/tasks';
-        const res = await fetch(url, {
-            method,
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-        });
-        if (res.ok) {
-            showToast('Tarefa salva com sucesso');
-            closeModal();
-            fetchTasks();
-        } else {
-            showToast('Erro ao salvar tarefa', false);
+        async function createKanbanTask() {
+            const title = document.getElementById('kanban-title').value.trim();
+            const desc = document.getElementById('kanban-desc').value.trim();
+            if (!title) { showToast(t('toast_title_required'), false); return; }
+            const res = await fetch('/api/tasks', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ title, description: desc, status: 'PENDING' })
+            });
+            if (res.ok) {
+                document.getElementById('kanban-title').value = '';
+                document.getElementById('kanban-desc').value = '';
+                fetchTasks();
+            } else {
+                showToast(t('toast_create_error'), false);
+            }
         }
-    });
 
-    async function createKanbanTask() {
-        const title = document.getElementById('kanban-title').value.trim();
-        const desc = document.getElementById('kanban-desc').value.trim();
-        if (!title) { showToast('Informe um título', false); return; }
-        const res = await fetch('/api/tasks', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ title, description: desc, status: 'PENDING' })
-        });
-        if (res.ok) {
-            document.getElementById('kanban-title').value = '';
-            document.getElementById('kanban-desc').value = '';
-            fetchTasks();
-        } else {
-            showToast('Erro ao criar tarefa', false);
+        async function updateStatus(id, status, silent) {
+            const res = await fetch(`/api/tasks/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ status })
+            });
+            if (res.ok) {
+                if (!silent) showToast(t('toast_status_ok'));
+                fetchTasks();
+            } else {
+                showToast(t('toast_status_error'), false);
+            }
         }
-    }
 
-    async function updateStatus(id, status, silent) {
-        const res = await fetch(`/api/tasks/${id}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ status })
-        });
-        if (res.ok) {
-            if (!silent) showToast('Status atualizado');
-            fetchTasks();
-        } else {
-            showToast('Erro ao atualizar', false);
+        async function deleteTask(id) {
+            const res = await fetch(`/api/tasks/${id}`, { method: 'DELETE' });
+            if (res.ok) { showToast(t('toast_delete_ok')); fetchTasks(); }
+            else { showToast(t('toast_delete_error'), false); }
         }
-    }
 
-    async function deleteTask(id) {
-        const res = await fetch(`/api/tasks/${id}`, { method: 'DELETE' });
-        if (res.ok) { showToast('Tarefa excluída'); fetchTasks(); }
-        else { showToast('Erro ao excluir', false); }
-    }
-
-    AppSettings.initPage(() => { fetchTasks(); });
-</script>
+        AppSettings.initPage((settings) => {
+            currentLang = settings.language || 'pt-br';
+            applyDynamicTexts();
+            fetchTasks();
+        });
+    </script>
 </body>
+
 </html>
+

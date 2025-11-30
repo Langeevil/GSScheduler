@@ -7,13 +7,16 @@ import br.com.gabrielsiqueira.GSScheduler.repository.UserRepository;
 import br.com.gabrielsiqueira.GSScheduler.service.TaskService;
 import br.com.gabrielsiqueira.GSScheduler.service.UserSettingService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
@@ -34,7 +37,10 @@ public class ReportController {
     private UserSettingService userSettingService;
 
     @GetMapping("/summary")
-    public ReportSummary summary(Authentication authentication) {
+    public ReportSummary summary(Authentication authentication,
+                                 @RequestParam(required = false) String status,
+                                 @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate start,
+                                 @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate end) {
         User user = currentUser(authentication);
         UserSetting setting = userSettingService.findOrCreate(user);
 
@@ -49,6 +55,23 @@ public class ReportController {
                         LocalDateTime ref = t.getScheduledAt() != null ? t.getScheduledAt() : t.getCreatedAt();
                         return ref == null || !ref.isBefore(finalCutoff);
                     })
+                    .toList();
+        }
+
+        if (status != null && !status.isBlank()) {
+            String s = status.trim().toUpperCase();
+            tasks = tasks.stream().filter(t -> s.equals(t.getStatus())).toList();
+        }
+        if (start != null) {
+            LocalDateTime startDt = start.atStartOfDay();
+            tasks = tasks.stream()
+                    .filter(t -> t.getScheduledAt() != null && !t.getScheduledAt().isBefore(startDt))
+                    .toList();
+        }
+        if (end != null) {
+            LocalDateTime endDt = end.plusDays(1).atStartOfDay().minusNanos(1);
+            tasks = tasks.stream()
+                    .filter(t -> t.getScheduledAt() != null && !t.getScheduledAt().isAfter(endDt))
                     .toList();
         }
 
