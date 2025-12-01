@@ -40,6 +40,26 @@ public class AdminUserController {
         return userRepository.findAll().stream().map(UserView::from).toList();
     }
 
+    @PostMapping("/api/admin/users")
+    @ResponseBody
+    public UserView create(@RequestBody CreateUserRequest payload) {
+        if (payload.username == null || payload.username.isBlank()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Usuario obrigatorio");
+        }
+        if (payload.password == null || payload.password.isBlank()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Senha obrigatoria");
+        }
+        if (!payload.password.equals(payload.confirm)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Senhas nao conferem");
+        }
+        if (userRepository.existsByUsername(payload.username)) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Usuario ja existe");
+        }
+
+        User user = new User(payload.username, passwordEncoder.encode(payload.password), true, "ROLE_USER");
+        return UserView.from(userRepository.save(user));
+    }
+
     @PutMapping("/api/admin/users/{id}")
     @ResponseBody
     public UserView update(@PathVariable Long id, @RequestBody User payload) {
@@ -91,5 +111,19 @@ public class AdminUserController {
         public String getLastName() { return lastName; }
         public String getEmail() { return email; }
         public String getRoles() { return roles; }
+    }
+
+    public static class CreateUserRequest {
+        private String username;
+        private String password;
+        private String confirm;
+
+        public String getUsername() { return username; }
+        public String getPassword() { return password; }
+        public String getConfirm() { return confirm; }
+
+        public void setUsername(String username) { this.username = username; }
+        public void setPassword(String password) { this.password = password; }
+        public void setConfirm(String confirm) { this.confirm = confirm; }
     }
 }
