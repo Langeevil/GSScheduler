@@ -26,9 +26,14 @@ public class TaskController {
     @GetMapping
     public Page<Task> list(@RequestParam(defaultValue = "0") int page,
                            @RequestParam(defaultValue = "10") int size,
+                           @RequestParam(required = false) String search,
                            Authentication authentication) {
         User current = currentUser(authentication);
-        return service.listByUser(current, PageRequest.of(page, size, Sort.by("scheduledAt").descending()));
+        PageRequest pageable = PageRequest.of(page, size, Sort.by("scheduledAt").descending());
+        if (search != null && !search.isBlank()) {
+            return service.searchByUser(current, search.trim(), pageable);
+        }
+        return service.listByUser(current, pageable);
     }
 
     @PostMapping

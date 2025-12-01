@@ -218,6 +218,8 @@
             text-decoration: none;
             font-weight: 600;
             transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s;
+            box-shadow: 0 1px 0 rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,0.6);
+            text-shadow: 0 1px 0 rgba(255,255,255,0.7);
         }
 
         .btn-admin:hover {
@@ -230,6 +232,7 @@
             border-color: #9eb1ff;
             background: rgba(102, 126, 234, 0.15);
             color: #e8ecf6;
+            text-shadow: none;
         }
 
         .theme-dark .btn-admin:hover {
@@ -298,7 +301,7 @@
                             <path d="M17 14h3v7"></path>
                             <path d="M17 18h3"></path>
                         </svg>
-                        Gerenciar usuários
+                        Gerenciar usuarios
                     </a>
                 </div>
                 <form action="/logout" method="POST" style="display: inline;">

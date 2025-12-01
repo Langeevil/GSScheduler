@@ -12,6 +12,7 @@
     </script>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
     <title>Tarefas - GSScheduler</title>
     <style>
         :root {
@@ -135,6 +136,38 @@
 
         .breadcrumb a:hover {
             text-decoration: underline;
+        }
+
+        .list-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .search-group {
+            display: flex;
+            gap: 8px;
+            flex: 1;
+            min-width: 240px;
+        }
+
+        .search-group input {
+            flex: 1;
+        }
+
+        .pagination-bar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .page-size {
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
         h2 {
@@ -496,6 +529,26 @@
 
             <div id="list-view">
                 <h2 data-i18n="list_title">Lista de Tarefas</h2>
+                <div class="list-controls">
+                    <div class="search-group">
+                        <input class="form-control" id="task-search" placeholder="Buscar por titulo ou descricao" />
+                        <button class="btn btn-primary" id="btn-search">Buscar</button>
+                    </div>
+                    <div class="pagination-bar">
+                        <div class="page-size">
+                            <label for="page-size">Por pagina</label>
+                            <select id="page-size" class="form-select form-select-sm" style="width:auto">
+                                <option value="5">5</option>
+                                <option value="10" selected>10</option>
+                                <option value="20">20</option>
+                                <option value="50">50</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-secondary btn-sm" id="btn-prev">Anterior</button>
+                        <span id="page-info" style="color:var(--muted);"></span>
+                        <button class="btn btn-secondary btn-sm" id="btn-next">Proxima</button>
+                    </div>
+                </div>
                 <div id="task-table-wrapper">
                     <div class="empty-state" id="empty-state" data-i18n="empty_tasks">Nenhuma tarefa cadastrada. Clique
                         em "+ Nova Tarefa" para criar.</div>
@@ -596,12 +649,21 @@
         let currentLang = 'pt-br';
         const t = (key) => AppSettings.translateKey(key, currentLang);
         let taskCache = [];
+        let currentPage = 0;
+        let totalPages = 0;
+        let pageSize = 10;
+        let searchTerm = '';
 
         document.getElementById('btn-new-task').addEventListener('click', () => openModal());
         document.getElementById('btn-cancel').addEventListener('click', closeModal);
         document.getElementById('btn-view-list').addEventListener('click', () => switchView('list'));
         document.getElementById('btn-view-kanban').addEventListener('click', () => switchView('kanban'));
         document.getElementById('btn-kanban-add').addEventListener('click', createKanbanTask);
+        document.getElementById('btn-search').addEventListener('click', () => { searchTerm = document.getElementById('task-search').value.trim(); currentPage = 0; fetchTasks(); });
+        document.getElementById('task-search').addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); searchTerm = e.target.value.trim(); currentPage = 0; fetchTasks(); } });
+        document.getElementById('page-size').addEventListener('change', (e) => { pageSize = Number(e.target.value); currentPage = 0; fetchTasks(); });
+        document.getElementById('btn-prev').addEventListener('click', () => { if (currentPage > 0) { currentPage -= 1; fetchTasks(); } });
+        document.getElementById('btn-next').addEventListener('click', () => { if (currentPage + 1 < totalPages) { currentPage += 1; fetchTasks(); } });
 
         function applyDynamicTexts() {
             document.getElementById('btn-view-list').textContent = t('view_list');
@@ -653,12 +715,26 @@
         }
 
         async function fetchTasks() {
-            const res = await fetch('/api/tasks?size=200');
+            const params = new URLSearchParams({ page: currentPage, size: pageSize });
+            if (searchTerm) params.append('search', searchTerm);
+            const res = await fetch('/api/tasks?' + params.toString());
             if (!res.ok) { showToast(t('toast_load_error'), false); return; }
             const page = await res.json();
             taskCache = page.content || [];
+            totalPages = page.totalPages || 0;
+            updatePaginationUI(page);
             renderTasks(taskCache);
             renderKanban(taskCache);
+        }
+
+        function updatePaginationUI(page) {
+            const info = document.getElementById('page-info');
+            const total = page.totalElements ?? taskCache.length;
+            const from = total === 0 ? 0 : (page.number * page.size) + 1;
+            const to = total === 0 ? 0 : Math.min((page.number + 1) * page.size, total);
+            info.textContent = `Mostrando ${from}-${to} de ${total}`;
+            document.getElementById('btn-prev').disabled = page.number <= 0;
+            document.getElementById('btn-next').disabled = page.number + 1 >= page.totalPages;
         }
 
         function renderTasks(tasks) {

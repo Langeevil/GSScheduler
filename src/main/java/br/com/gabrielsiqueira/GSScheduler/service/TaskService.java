@@ -36,6 +36,10 @@ public class TaskService {
         return repo.findByStatus(status, pageable);
     }
 
+    public Page<Task> searchByUser(User user, String query, Pageable pageable) {
+        return repo.searchByUser(user.getId(), query, pageable);
+    }
+
     @Async("taskExecutor")
     public CompletableFuture<Task> createAsync(Task task) {
         return CompletableFuture.completedFuture(repo.save(task));
