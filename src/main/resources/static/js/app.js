@@ -169,6 +169,47 @@ const AppSettings = (() => {
       go_tasks: "Ir para Tarefas",
       filters: "Filtros",
       generate_report: "Gerar Relatório",
+      view_list: "Modo Lista",
+      view_kanban: "Modo Kanban",
+      table_title: "Título",
+      table_status: "Status",
+      table_schedule: "Agendada para",
+      table_description: "Descrição",
+      table_actions: "Ações",
+      kanban_pending: "Pendentes",
+      kanban_in_progress: "Em progresso",
+      kanban_completed: "Concluídas",
+      kanban_title_placeholder: "Título da tarefa",
+      kanban_desc_placeholder: "Descrição (opcional)",
+      kanban_add: "Adicionar",
+      modal_new_task: "Nova Tarefa",
+      modal_edit_task: "Editar Tarefa",
+      label_title: "Título",
+      label_description: "Descrição",
+      label_schedule: "Agendar para",
+      label_status: "Status",
+      option_pending: "Pendente",
+      option_in_progress: "Em progresso",
+      option_completed: "Concluída",
+      btn_cancel: "Cancelar",
+      btn_save: "Salvar",
+      btn_edit: "Editar",
+      btn_done: "Concluir",
+      btn_delete: "Excluir",
+      empty_kanban: "Sem tarefas",
+      no_schedule: "Sem agendamento",
+      toast_load_error: "Erro ao carregar tarefas",
+      toast_title_required: "Informe um título",
+      toast_save_ok: "Tarefa salva com sucesso",
+      toast_save_error: "Erro ao salvar tarefa",
+      toast_create_error: "Erro ao criar tarefa",
+      toast_status_ok: "Status atualizado",
+      toast_status_error: "Erro ao atualizar",
+      toast_delete_ok: "Tarefa excluída",
+      toast_delete_error: "Erro ao excluir",
+      no_data: "Sem dados",
+      report_error: "Erro ao carregar Relatório",
+      report_updated: "Relatório atualizado",
     },
     en: {
       tasks_title: "My Tasks",
@@ -188,6 +229,47 @@ const AppSettings = (() => {
       go_tasks: "Go to Tasks",
       filters: "Filters",
       generate_report: "Generate Report",
+      view_list: "List View",
+      view_kanban: "Kanban View",
+      table_title: "Title",
+      table_status: "Status",
+      table_schedule: "Scheduled for",
+      table_description: "Description",
+      table_actions: "Actions",
+      kanban_pending: "Pending",
+      kanban_in_progress: "In progress",
+      kanban_completed: "Completed",
+      kanban_title_placeholder: "Task title",
+      kanban_desc_placeholder: "Description (optional)",
+      kanban_add: "Add",
+      modal_new_task: "New Task",
+      modal_edit_task: "Edit Task",
+      label_title: "Title",
+      label_description: "Description",
+      label_schedule: "Schedule for",
+      label_status: "Status",
+      option_pending: "Pending",
+      option_in_progress: "In progress",
+      option_completed: "Completed",
+      btn_cancel: "Cancel",
+      btn_save: "Save",
+      btn_edit: "Edit",
+      btn_done: "Done",
+      btn_delete: "Delete",
+      empty_kanban: "No tasks",
+      no_schedule: "No schedule",
+      toast_load_error: "Failed to load tasks",
+      toast_title_required: "Title is required",
+      toast_save_ok: "Task saved",
+      toast_save_error: "Failed to save task",
+      toast_create_error: "Failed to create task",
+      toast_status_ok: "Status updated",
+      toast_status_error: "Failed to update",
+      toast_delete_ok: "Task deleted",
+      toast_delete_error: "Failed to delete",
+      no_data: "No data",
+      report_error: "Failed to load report",
+      report_updated: "Report updated",
     },
     es: {
       tasks_title: "Mis Tareas",
@@ -207,11 +289,76 @@ const AppSettings = (() => {
       go_tasks: "Ir a Tareas",
       filters: "Filtros",
       generate_report: "Generar Informe",
+      view_list: "Vista de lista",
+      view_kanban: "Vista Kanban",
+      table_title: "Título",
+      table_status: "Estado",
+      table_schedule: "Programada para",
+      table_description: "Descripción",
+      table_actions: "Acciones",
+      kanban_pending: "Pendientes",
+      kanban_in_progress: "En progreso",
+      kanban_completed: "Completadas",
+      kanban_title_placeholder: "Título de la tarea",
+      kanban_desc_placeholder: "Descripción (opcional)",
+      kanban_add: "Agregar",
+      modal_new_task: "Nueva Tarea",
+      modal_edit_task: "Editar Tarea",
+      label_title: "Título",
+      label_description: "Descripción",
+      label_schedule: "Programar para",
+      label_status: "Estado",
+      option_pending: "Pendiente",
+      option_in_progress: "En progreso",
+      option_completed: "Completada",
+      btn_cancel: "Cancelar",
+      btn_save: "Guardar",
+      btn_edit: "Editar",
+      btn_done: "Concluir",
+      btn_delete: "Eliminar",
+      empty_kanban: "Sin tareas",
+      no_schedule: "Sin programación",
+      toast_load_error: "Error al cargar tareas",
+      toast_title_required: "Ingrese un título",
+      toast_save_ok: "Tarea guardada",
+      toast_save_error: "Error al guardar tarea",
+      toast_create_error: "Error al crear tarea",
+      toast_status_ok: "Estado actualizado",
+      toast_status_error: "Error al actualizar",
+      toast_delete_ok: "Tarea eliminada",
+      toast_delete_error: "Error al eliminar",
+      no_data: "Sin datos",
+      report_error: "Error al cargar reporte",
+      report_updated: "Reporte actualizado",
     },
   };
 
+  function getDict(lang) {
+    return translations[lang] || translations["pt-br"];
+  }
+
+  function translateStatus(status, lang) {
+    const dict = getDict(lang);
+    if (!status) return "";
+    switch (status) {
+      case "PENDING":
+        return dict.status_pending || status;
+      case "IN_PROGRESS":
+        return dict.status_in_progress || status;
+      case "COMPLETED":
+        return dict.status_completed || status;
+      default:
+        return status;
+    }
+  }
+
+  function translateKey(key, lang) {
+    const dict = getDict(lang);
+    return dict[key] || key;
+  }
+
   function applyI18n(lang) {
-    const dict = translations[lang] || translations["pt-br"];
+    const dict = getDict(lang);
     document.querySelectorAll("[data-i18n]").forEach((el) => {
       const key = el.getAttribute("data-i18n");
       if (dict[key]) el.textContent = dict[key];
@@ -225,5 +372,5 @@ const AppSettings = (() => {
     if (afterSettings) afterSettings(settings);
   }
 
-  return { initPage, fetchSettings };
+  return { initPage, fetchSettings, translateStatus, translateKey };
 })();

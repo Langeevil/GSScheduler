@@ -14,8 +14,16 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
+            padding: 20px;
+        }
+        .page {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
         }
         .card {
             background: white;
@@ -42,48 +50,50 @@
         .alert { padding: 12px; border-radius: 6px; margin-bottom: 12px; font-size: 13px; }
         .alert.error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
         .alert.success { background: #d1e7dd; color: #0f5132; border: 1px solid #badbcc; }
-        .app-footer { background: #ffffff; color: #333; margin-top: 24px; padding: 18px 14px; text-align: center; border-radius: 10px; border: 1px solid #e4e4e4; box-shadow: 0 6px 16px rgba(0,0,0,0.08); }
+        .app-footer { background: #ffffff; color: #333; margin-top: 24px; padding: 18px 14px; text-align: center; border-radius: 10px; border: 1px solid #e4e4e4; box-shadow: 0 6px 16px rgba(0,0,0,0.08); width: 100%; max-width: 900px; }
         .app-footer .hr-container { display: flex; justify-content: center; margin: 8px 0; }
         .app-footer hr { width: 90%; border: 0; border-top: 2px solid #667eea; opacity: 0.6; }
     </style>
 </head>
 <body>
-    <div class="card">
-        <h1>Crie sua conta</h1>
-        <p class="subtitle">Acesse o GSScheduler com suas credenciais</p>
+    <div class="page">
+        <div class="card">
+            <h1>Crie sua conta</h1>
+            <p class="subtitle">Acesse o GSScheduler com suas credenciais</p>
 
-        <div th:if="${error}" class="alert error" th:text="${error}"></div>
-        <div th:if="${success}" class="alert success" th:text="${success}"></div>
+            <div th:if="${error}" class="alert error" th:text="${error}"></div>
+            <div th:if="${success}" class="alert success" th:text="${success}"></div>
 
-        <form th:action="@{/register}" method="post">
-            <div class="form-group">
-                <label for="firstName">Nome</label>
-                <input id="firstName" name="firstName" />
-            </div>
-            <div class="form-group">
-                <label for="lastName">Sobrenome</label>
-                <input id="lastName" name="lastName" />
-            </div>
-            <div class="form-group">
-                <label for="email">E-mail</label>
-                <input id="email" name="email" type="email" />
-            </div>
-            <div class="form-group">
-                <label for="username">Usuario</label>
-                <input id="username" name="username" required />
-            </div>
-            <div class="form-group">
-                <label for="password">Senha</label>
-                <input id="password" name="password" type="password" required />
-            </div>
-            <div class="form-group">
-                <label for="confirm">Confirmar senha</label>
-                <input id="confirm" name="confirm" type="password" required />
-            </div>
-            <button type="submit">Cadastrar</button>
-        </form>
+            <form th:action="@{/register}" method="post">
+                <div class="form-group">
+                    <label for="firstName">Nome</label>
+                    <input id="firstName" name="firstName" />
+                </div>
+                <div class="form-group">
+                    <label for="lastName">Sobrenome</label>
+                    <input id="lastName" name="lastName" />
+                </div>
+                <div class="form-group">
+                    <label for="email">E-mail</label>
+                    <input id="email" name="email" type="email" />
+                </div>
+                <div class="form-group">
+                    <label for="username">Usuario</label>
+                    <input id="username" name="username" required />
+                </div>
+                <div class="form-group">
+                    <label for="password">Senha</label>
+                    <input id="password" name="password" type="password" required />
+                </div>
+                <div class="form-group">
+                    <label for="confirm">Confirmar senha</label>
+                    <input id="confirm" name="confirm" type="password" required />
+                </div>
+                <button type="submit">Cadastrar</button>
+            </form>
 
-        <p class="muted">Ja tem conta? <a href="/login">Voltar ao login</a></p>
+            <p class="muted">Ja tem conta? <a href="/login">Voltar ao login</a></p>
+        </div>
     </div>
     <div class="app-footer">
         <footer>

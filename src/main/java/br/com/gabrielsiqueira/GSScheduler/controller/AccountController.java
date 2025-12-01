@@ -49,7 +49,7 @@ public class AccountController {
     @PostMapping("/password")
     public Map<String, String> changePassword(@RequestBody PasswordChangeRequest request, Authentication authentication) {
         if (request == null || isBlank(request.getCurrentPassword()) || isBlank(request.getNewPassword())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Senha atual e nova senha s��o obrigat��rias");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Senha atual e nova senha são obrigatórias");
         }
         if (request.getNewPassword().length() < 6) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Nova senha deve ter pelo menos 6 caracteres");
@@ -78,7 +78,7 @@ public class AccountController {
             session.invalidate();
         }
         SecurityContextHolder.clearContext();
-        return Map.of("message", "Sess��es encerradas");
+        return Map.of("message", "Sessões encerradas");
     }
 
     private void expireSession(SessionInformation info) {
