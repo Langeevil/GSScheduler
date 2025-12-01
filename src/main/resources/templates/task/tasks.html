@@ -524,8 +524,8 @@
                     </div>
                     <div class="dropzone" data-status="PENDING"></div>
                 </div>
+                <div class="column" data-status="IN_PROGRESS">
                     <h3 data-i18n="kanban_in_progress">Em progresso</h3>
-                    <h3>Em progresso</h3>
                     <div class="dropzone" data-status="IN_PROGRESS"></div>
                 </div>
                 <div class="column" data-status="COMPLETED">
@@ -542,30 +542,30 @@
             <form id="task-form">
                 <input type="hidden" id="task-id" />
                 <div class="form-group">
-                    <label for="title">Título</label>
-                    <input id="title" name="title" required />
                     <label for="title" data-i18n="label_title">Titulo</label>
                     <input id="title" name="title" required />
-                    <label for="description">Descrição</label>
-                    <textarea id="description" name="description" rows="3"></textarea>
+                </div>
+                <div class="form-group">
                     <label for="description" data-i18n="label_description">Descricao</label>
                     <textarea id="description" name="description" rows="3"></textarea>
-                    <label for="scheduledAt">Agendar para</label>
-                    <input id="scheduledAt" name="scheduledAt" type="datetime-local" />
+                </div>
+                <div class="form-group">
                     <label for="scheduledAt" data-i18n="label_schedule">Agendar para</label>
                     <input id="scheduledAt" name="scheduledAt" type="datetime-local" />
-                    <label for="status">Status</label>
-                    <select id="status" name="status">
+                </div>
+                <div class="form-group">
                     <label for="status" data-i18n="label_status">Status</label>
-                        <option value="IN_PROGRESS">Em progresso</option>
+                    <select id="status" name="status">
                         <option value="PENDING" data-i18n="option_pending">Pendente</option>
                         <option value="IN_PROGRESS" data-i18n="option_in_progress">Em progresso</option>
                         <option value="COMPLETED" data-i18n="option_completed">Concluida</option>
+                    </select>
+                </div>
                 <div class="actions">
-                    <button type="button" class="btn btn-secondary" id="btn-cancel">Cancelar</button>
-                    <button type="submit" class="btn btn-primary">Salvar</button>
                     <button type="button" class="btn btn-secondary" id="btn-cancel" data-i18n="btn_cancel">Cancelar</button>
                     <button type="submit" class="btn btn-primary" data-i18n="btn_save">Salvar</button>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -838,4 +838,3 @@
 </body>
 
 </html>
-

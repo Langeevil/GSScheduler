@@ -149,6 +149,34 @@
             display: none;
             z-index: 30;
         }
+
+        .card {
+            background: var(--panel);
+            border-radius: 12px;
+            box-shadow: 0 2px 10px var(--shadow);
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 12px;
+            margin: 12px 0;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            color: var(--muted);
+            margin-bottom: 4px;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
     </style>
     <script src="/js/app.js"></script>
 </head>
@@ -156,23 +184,47 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>Usuários</h1>
+            <h1>Usuarios</h1>
             <a class="btn btn-secondary" href="/dashboard">Voltar</a>
         </div>
+
+        <div class="card">
+            <h2>Novo usuario</h2>
+            <div class="form-grid">
+                <div>
+                    <label for="new-username">Usuario</label>
+                    <input id="new-username" autocomplete="new-username" placeholder="usuario" />
+                </div>
+                <div>
+                    <label for="new-password">Senha</label>
+                    <input id="new-password" type="password" autocomplete="new-password" placeholder="Senha" />
+                </div>
+                <div>
+                    <label for="new-confirm">Confirmar senha</label>
+                    <input id="new-confirm" type="password" autocomplete="new-password" placeholder="Confirme a senha" />
+                </div>
+            </div>
+            <div class="form-actions">
+                <button class="btn btn-primary" id="create-user-btn">Cadastrar usuario</button>
+            </div>
+        </div>
+
         <table>
             <thead>
                 <tr>
                     <th>Nome</th>
                     <th>Sobrenome</th>
                     <th>E-mail</th>
-                    <th>Usuário</th>
+                    <th>Usuario</th>
+                    <th>Nova senha</th>
+                    <th>Confirmar</th>
                     <th>Role</th>
-                    <th>Ações</th>
+                    <th>Acoes</th>
                 </tr>
             </thead>
             <tbody id="user-body">
                 <tr>
-                    <td colspan="6" style="text-align:center;color:var(--muted);padding:20px;">Carregando...</td>
+                    <td colspan="8" style="text-align:center;color:var(--muted);padding:20px;">Carregando...</td>
                 </tr>
             </tbody>
         </table>
@@ -180,7 +232,7 @@
     <div class="toast" id="toast"></div>
     <script>
         const rolesOptions = [
-            { value: 'ROLE_USER', label: 'Usuário' },
+            { value: 'ROLE_USER', label: 'Usuario' },
             { value: 'ROLE_ADMIN', label: 'Admin' }
         ];
 
@@ -194,7 +246,7 @@
 
         async function loadUsers() {
             const res = await fetch('/api/admin/users');
-            if (!res.ok) { showToast('Erro ao carregar usuários', false); return; }
+            if (!res.ok) { showToast('Erro ao carregar usuarios', false); return; }
             const users = await res.json();
             renderUsers(users);
         }
@@ -209,6 +261,8 @@
                 <td><input value="${u.lastName || ''}" data-field="lastName"></td>
                 <td><input value="${u.email || ''}" data-field="email"></td>
                 <td>${u.username}</td>
+                <td><input type="password" data-field="password" placeholder="Nova senha (opcional)" autocomplete="new-password"></td>
+                <td><input type="password" data-field="confirm" placeholder="Confirmar" autocomplete="new-password"></td>
                 <td>
                     <select data-field="roles">
                         ${rolesOptions.map(r => `<option value="${r.value}" ${u.roles === r.value ? 'selected' : ''}>${r.label}</option>`).join('')}
@@ -232,27 +286,78 @@
                 email: tr.querySelector('[data-field="email"]').value.trim(),
                 roles: tr.querySelector('[data-field="roles"]').value
             };
+            const password = tr.querySelector('[data-field="password"]').value;
+            const confirm = tr.querySelector('[data-field="confirm"]').value;
+
+            if (password || confirm) {
+                if (password !== confirm) {
+                    showToast('Senhas nao conferem', false);
+                    return;
+                }
+                payload.password = password;
+            }
+
             const res = await fetch('/api/admin/users/' + id, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
             });
-            if (res.ok) showToast('Usuário salvo');
-            else showToast('Erro ao salvar', false);
+            if (res.ok) {
+                tr.querySelector('[data-field="password"]').value = '';
+                tr.querySelector('[data-field="confirm"]').value = '';
+                showToast('Usuario salvo');
+            } else {
+                showToast('Erro ao salvar', false);
+            }
         }
 
         async function deleteUser(id, tr) {
-            if (!confirm('Ao excluir o usuário, todas as tarefas associadas serão removidas. Confirmar exclusão?')) return;
+            if (!confirm('Ao excluir o usuario, todas as tarefas associadas serao removidas. Confirmar exclusao?')) return;
             const res = await fetch('/api/admin/users/' + id, { method: 'DELETE' });
             if (res.ok) {
                 tr.remove();
-                showToast('Usuário excluído');
+                showToast('Usuario excluido');
             } else {
                 showToast('Erro ao excluir', false);
             }
         }
 
-        AppSettings.initPage(() => { loadUsers(); });
+        async function createUser() {
+            const username = document.getElementById('new-username').value.trim();
+            const password = document.getElementById('new-password').value;
+            const confirm = document.getElementById('new-confirm').value;
+
+            if (!username || !password) {
+                showToast('Informe usuario e senha', false);
+                return;
+            }
+            if (password !== confirm) {
+                showToast('Senhas nao conferem', false);
+                return;
+            }
+
+            const res = await fetch('/api/admin/users', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password, confirm })
+            });
+
+            if (res.ok) {
+                document.getElementById('new-username').value = '';
+                document.getElementById('new-password').value = '';
+                document.getElementById('new-confirm').value = '';
+                showToast('Usuario criado');
+                loadUsers();
+            } else {
+                const msg = await res.text();
+                showToast(msg || 'Erro ao criar usuario', false);
+            }
+        }
+
+        AppSettings.initPage(() => {
+            document.getElementById('create-user-btn').addEventListener('click', createUser);
+            loadUsers();
+        });
     </script>
 </body>
 
